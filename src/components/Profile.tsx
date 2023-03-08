@@ -5,19 +5,16 @@ import { LogoutButton } from "./Logout";
 
 export const Profile = () => {
     const { user, isAuthenticated, isLoading } = useAuth0();
-    {/*
+
     if(isLoading) {
         return(<div>Loading...</div>)
     }
-*/}
 
     return (
         isAuthenticated ?
             <div className="Identificacion">
-                <img src={user?.picture} alt={user?.name} id="ImagenUsuario"/>
-                <LogoutButton/>      
-                
-                
+                <img src={user?.picture} alt={user?.name}/>
+                <LogoutButton/>
             </div>
             :<><LoginButton/></>
     )
