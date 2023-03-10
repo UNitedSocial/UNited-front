@@ -1,44 +1,90 @@
 import "../App.css"
 import {
+    Alert,
     AppBar, Autocomplete,
     Avatar,
     Box,
     Button,
-    Container,
+    Container, Grid,
     IconButton,
     Menu,
-    MenuItem, Paper, TextField,
+    MenuItem, Paper, Snackbar, TextField,
     Toolbar,
     Tooltip,
     Typography
 } from "@mui/material";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useAuth0} from "@auth0/auth0-react";
 import UNited_logo from '../assets/united_logo_no_bg_white.png';
+import {BiFilterAlt, BiSearch, BiSortAlt2} from "react-icons/bi";
+import {text} from "stream/consumers";
 
 const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function TopNavBar(){
 
-    const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+    const [openToast, setOpenToast] = useState(false);
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+    const [selectedOption, setSelectedOption] = useState("");
+    const [value, setValue] = useState('');
+    const [inputValue, setInputValue] = useState('');
+
+    const {loginWithRedirect} = useAuth0();
+    const { logout } = useAuth0();
     const { user, isAuthenticated, isLoading } = useAuth0();
 
-    const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorElNav(event.currentTarget);
-    };
-    const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorElUser(event.currentTarget);
-    };
+    useEffect(() => {
+        if(selectedOption !== ""){
+            if(selectedOption === "Logout"){
+                logout();
+            }
+        }
+        setSelectedOption("")
+    }, [selectedOption]);
 
-    const handleCloseNavMenu = (event: React.MouseEvent) => {
-        setAnchorElNav(null);
+    /*useEffect(() => {
+        console.log(user)
+    }, [user]);*/
+
+
+    const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+        if(isAuthenticated){
+            setAnchorElUser(event.currentTarget);
+        } else {
+            loginWithRedirect().then(() => setOpenToast(true));
+            setSelectedOption("")
+            setAnchorElUser(event.currentTarget);
+        }
     };
 
     const handleCloseUserMenu = (event: React.MouseEvent) => {
+        const target = event.target as HTMLElement;
+        const textContentHandle = target.textContent;
+
+        if(textContentHandle !== null){
+            setSelectedOption(textContentHandle);
+        } else {
+            setSelectedOption("");
+        }
         setAnchorElUser(null);
     };
+
+    const handleEnter = (event : React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter') {
+            let search;
+            if(value !== ""){
+                search = value;
+            } else {
+                search = inputValue;
+            }
+            handleSearch(search)
+        }
+    };
+
+    const handleSearch = (search : String) => {
+        console.log("Searched: " + search);
+    }
 
     return(
         <AppBar position="static" sx={{ backgroundColor: "#0c4c8a" }}>
@@ -57,106 +103,68 @@ function TopNavBar(){
                         src={UNited_logo}
                     />
 
-                    <Paper sx={{
-                        height: "auto",
-                        width: "25%",
-                        maxWidth: { xs: "100%", md: "80vw" },
-                        maxHeight: { xs: "50vh", md: "60vh" },
-                        margin: "auto",
-                        marginLeft: "5%",
-                        marginRight: "5%",
-                        backgroundColor: "white",
-                        padding: "0.5em"
-                    }}>
-                        <Autocomplete
-                            freeSolo
-                            disableClearable
-                            fullWidth={true}
-                            options={top100Films.map((option) => option.title)}
-                            renderInput={(params) => (
-                                <TextField
-                                    {...params}
-                                    hiddenLabel
-                                    defaultValue="Small"
-                                    variant="outlined"
-                                    size="small"
-                                    InputProps={{
-                                        ...params.InputProps,
-                                        type: 'search',
-                                    }}
-                                />
-                            )}
-                        />
-                    </Paper>
+                    <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
+                        <Box sx={{ flexGrow: 2, display: 'contents'}}>
+                            <Paper sx={{
+                                height: "auto",
+                                width: "35%",
+                                maxWidth: { xs: "100%", md: "80vw" },
+                                maxHeight: { xs: "50vh", md: "60vh" },
+                                margin: "auto",
+                                marginLeft: "1%",
+                                marginRight: "1%",
+                                backgroundColor: "white",
+                                padding: "0.5em"
+                            }}>
+                                <Grid container>
+                                    <Grid item xs={10.8}>
+                                        <Autocomplete
+                                            freeSolo
+                                            disableClearable
+                                            fullWidth={true}
+                                            options={top100Films.map((option) => option.title)}
+                                            value={value}
+                                            onChange={(event, newValue) => {
+                                                setValue(newValue);
+                                            }}
+                                            inputValue={inputValue}
+                                            onInputChange={(event, newInputValue) => {
+                                                setInputValue(newInputValue);
+                                            }}
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                    hiddenLabel
+                                                    variant="outlined"
+                                                    size="small"
+                                                    InputProps={{
+                                                        ...params.InputProps,
+                                                        type: 'search',
+                                                    }}
+                                                    onKeyDown={handleEnter}
+                                                />
+                                            )}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={1.2}>
+                                        <IconButton type="button" aria-label="search">
+                                            <BiSearch />
+                                        </IconButton>
+                                    </Grid>
+                                </Grid>
+                            </Paper>
+                            <IconButton type="button" aria-label="search">
+                                <BiFilterAlt color="#fefefe"/>
+                            </IconButton>
+                            <IconButton type="button" aria-label="search">
+                                <BiSortAlt2 color="#fefefe"/>
+                            </IconButton>
+                        </Box>
 
-
-                    <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-                        <IconButton
-                            size="large"
-                            aria-label="account of current user"
-                            aria-controls="menu-appbar"
-                            aria-haspopup="true"
-                            onClick={handleOpenNavMenu}
-                            color="inherit"
-                        >
-                        </IconButton>
-                        <Menu
-                            id="menu-appbar"
-                            anchorEl={anchorElNav}
-                            anchorOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'left',
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'left',
-                            }}
-                            open={Boolean(anchorElNav)}
-                            onClose={handleCloseNavMenu}
-                            sx={{
-                                display: { xs: 'block', md: 'none' },
-                            }}
-                        >
-                            {pages.map((page) => (
-                                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                    <Typography textAlign="center">{page}</Typography>
-                                </MenuItem>
-                            ))}
-                        </Menu>
-                    </Box>
-                    <Typography
-                        variant="h5"
-                        noWrap
-                        component="a"
-                        href=""
-                        sx={{
-                            mr: 2,
-                            display: { xs: 'flex', md: 'none' },
-                            flexGrow: 1,
-                            fontFamily: 'monospace',
-                            fontWeight: 700,
-                            letterSpacing: '.3rem',
-                            color: 'inherit',
-                            textDecoration: 'none',
-                        }}
-                    >
-                        LOGO
-                    </Typography>
-                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                        {pages.map((page) => (
-                            <Button
-                                key={page}
-                                onClick={handleCloseNavMenu}
-                                sx={{ my: 2, color: 'white', display: 'block' }}
-                            >
-                                {page}
-                            </Button>
-                        ))}
                     </Box>
 
                     <Box sx={{ flexGrow: 0 }}>
-                        <Tooltip title="Open settings">
+                        <Tooltip title={isAuthenticated ? "Open settings" : "Login"}>
                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                                 <Avatar src={user?.picture} />
                             </IconButton>
@@ -174,7 +182,7 @@ function TopNavBar(){
                                 vertical: 'top',
                                 horizontal: 'right',
                             }}
-                            open={Boolean(anchorElUser)}
+                            open={isAuthenticated ? Boolean(anchorElUser) : false}
                             onClose={handleCloseUserMenu}
                         >
                             {settings.map((setting) => (
@@ -186,6 +194,11 @@ function TopNavBar(){
                     </Box>
                 </Toolbar>
             </Container>
+            <Snackbar open={openToast} autoHideDuration={6000} onClose={() => setOpenToast(false)}>
+                <Alert onClose={() => setOpenToast(false)} severity="success" sx={{ width: '100%' }}>
+                    This is a success message!
+                </Alert>
+            </Snackbar>
         </AppBar>
 
     )
