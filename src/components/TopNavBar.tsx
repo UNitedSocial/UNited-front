@@ -83,7 +83,7 @@ function TopNavBar(){
     }
 
     return(
-        <AppBar position="static" sx={{ backgroundColor: "#0c4c8a" }}>
+        <AppBar position="fixed" sx={{ backgroundColor: "#0c4c8a" }}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <ButtonBase onClick={() => console.log("")}
