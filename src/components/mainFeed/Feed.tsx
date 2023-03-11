@@ -8,6 +8,8 @@ export default function Feed() {
         <div className="feedWrapper">  
           {Posts.map((p:any) =>(
             <Post key = {p.id} post ={p}/>
+
+            
           ))}
         </div>
       </div>
