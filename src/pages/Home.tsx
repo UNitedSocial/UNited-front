@@ -1,5 +1,5 @@
 import TopNavBar from "../components/TopNavBar"
-import Feed from "../components/feed/Feed"
+import Feed from "../components/mainFeed/Feed"
 
 function Home (){
     return (<>
