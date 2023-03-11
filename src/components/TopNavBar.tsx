@@ -4,7 +4,7 @@ import {
     AppBar, Autocomplete,
     Avatar,
     Box,
-    Button,
+    ButtonBase,
     Container, Grid,
     IconButton,
     Menu,
@@ -17,9 +17,7 @@ import React, {useEffect, useState} from "react";
 import {useAuth0} from "@auth0/auth0-react";
 import UNited_logo from '../assets/united_logo_no_bg_white.png';
 import {BiFilterAlt, BiSearch, BiSortAlt2} from "react-icons/bi";
-import {text} from "stream/consumers";
 
-const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function TopNavBar(){
@@ -70,17 +68,15 @@ function TopNavBar(){
         setAnchorElUser(null);
     };
 
-    const handleEnter = (event : React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === 'Enter') {
-            let search;
-            if(value !== ""){
-                search = value;
-            } else {
-                search = inputValue;
-            }
-            handleSearch(search)
+    const handleSearchClick = () => {
+        let search;
+        if(inputValue !== ""){
+            search = inputValue;
+        } else {
+            search = value;
         }
-    };
+        handleSearch(search);
+    }
 
     const handleSearch = (search : String) => {
         console.log("Searched: " + search);
@@ -90,18 +86,22 @@ function TopNavBar(){
         <AppBar position="static" sx={{ backgroundColor: "#0c4c8a" }}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                    <Box
-                        component="img"
-                        sx={{
-                            height: "auto",
-                            width: "9%",
-                            maxWidth: { xs: "100%", md: "80vw" },
-                            maxHeight: { xs: "50vh", md: "60vh" },
-                            margin: "auto"
-                        }}
-                        alt="Logo"
-                        src={UNited_logo}
-                    />
+                    <ButtonBase onClick={() => console.log("")}
+                                sx={{
+                                    width: "9%",
+                                    maxWidth: { xs: "100%", md: "80vw" },
+                                    maxHeight: { xs: "50vh", md: "60vh" }
+                                }}>
+                        <Box
+                            component="img"
+                            sx={{
+                                height: "auto",
+                                width: "100%"
+                            }}
+                            alt="Logo"
+                            src={UNited_logo}
+                        />
+                    </ButtonBase>
 
                     <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
                         <Box sx={{ flexGrow: 2, display: 'contents'}}>
@@ -141,22 +141,21 @@ function TopNavBar(){
                                                         ...params.InputProps,
                                                         type: 'search',
                                                     }}
-                                                    onKeyDown={handleEnter}
                                                 />
                                             )}
                                         />
                                     </Grid>
                                     <Grid item xs={1.2}>
-                                        <IconButton type="button" aria-label="search">
+                                        <IconButton type="button" aria-label="search" onClick={handleSearchClick}>
                                             <BiSearch />
                                         </IconButton>
                                     </Grid>
                                 </Grid>
                             </Paper>
-                            <IconButton type="button" aria-label="search">
+                            <IconButton type="button" aria-label="filer">
                                 <BiFilterAlt color="#fefefe"/>
                             </IconButton>
-                            <IconButton type="button" aria-label="search">
+                            <IconButton type="button" aria-label="sort">
                                 <BiSortAlt2 color="#fefefe"/>
                             </IconButton>
                         </Box>
