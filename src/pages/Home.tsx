@@ -2,13 +2,15 @@ import TopNavBar from "../components/TopNavBar"
 import Feed from "../components/mainFeed/Feed"
 import GroupForm from "../components/form/GroupForm"
 
-function Home (){
+function Home() {
     return (<>
             <TopNavBar/>
             <div className={"Content"}>
-                <GroupForm />
+                <Feed/>
+
+                <GroupForm/>
             </div>
-            
+
         </>
     )
 }
