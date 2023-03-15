@@ -22,6 +22,7 @@ import React, {useEffect, useState} from "react";
 import {useAuth0} from "@auth0/auth0-react";
 import UNited_logo from '../assets/united_logo_no_bg_white.png';
 import {BiFilterAlt, BiSearch, BiSortAlt2} from "react-icons/bi";
+import axios from "axios";
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
@@ -35,16 +36,28 @@ function TopNavBar() {
 
     const {loginWithRedirect} = useAuth0();
     const {logout} = useAuth0();
-    const {user, isAuthenticated, isLoading} = useAuth0();
+    const {user, isAuthenticated, getAccessTokenSilently} = useAuth0();
 
     useEffect(() => {
         if (selectedOption !== "") {
+            if(selectedOption === "Profile"){
+                callProtectedAPI().then();
+            }
             if (selectedOption === "Logout") {
                 logout();
             }
         }
         setSelectedOption("")
     }, [selectedOption]);
+
+    async function callProtectedAPI() {
+        const token = await getAccessTokenSilently();
+        const response = await axios.get("http://localhost:3002/protected", {
+            headers: {
+                authorization: "Bearer " + token,
+            }
+        })
+    }
 
     /*useEffect(() => {
         console.log(user)

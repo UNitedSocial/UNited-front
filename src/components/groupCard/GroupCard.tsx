@@ -8,6 +8,7 @@ interface Group {
 interface GroupInfo {
     name: string;
     description: string;
+    referenceImg: string;
 }
 
 function GroupCard(groupElement: Group) {
@@ -19,7 +20,7 @@ function GroupCard(groupElement: Group) {
         <Card sx={{maxWidth: {xs: "60%", md: "35vw"}}} style={{background: "#EFECEB"}}>
             <CardMedia
                 sx={{height: 194}}
-                image="https://picsum.photos/200/300?random=1"
+                image={info.referenceImg}
                 title="Grupo Unal"
             />
             <CardContent>

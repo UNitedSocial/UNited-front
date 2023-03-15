@@ -17,13 +17,11 @@ export default function Feed() {
     async function loadPosts() {
         const response = await fetch('http://localhost:3002/api/groups?n=5');
         const data = await response.json();
-        console.log(data)
         return data;
     }
 
     const loadedPosts = (data: Array<any>) => {
         try {
-            data.map((a) => (console.log(a)));
             setPosts(data);
             setIsLoading(false);
         } catch {
@@ -96,13 +94,10 @@ export default function Feed() {
                     alignItems="center"
                     spacing={5}>
                     {posts.map((postElement, idx) => (
-                        <>
                             <GroupCard
                                 key={idx}
                                 info={postElement.info}
                             />
-                            <Post key={postElement.id} post={postElement}/>
-                        </>
                     ))}
                 </Stack>
 

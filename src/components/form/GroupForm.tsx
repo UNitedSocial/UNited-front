@@ -54,9 +54,10 @@ function GroupForm() {
                     labelId="select-label"
                     id="select"
                     label="Tipo de grupo"
+                    value={""}
                 >
                     {options.map((optionElement, idx) => (
-                        <MenuItem value={options[idx]}>{options[idx]}</MenuItem>
+                        <MenuItem key={idx} value={options[idx]}>{options[idx]}</MenuItem>
                     ))}
                 </Select>
             </FormControl>
