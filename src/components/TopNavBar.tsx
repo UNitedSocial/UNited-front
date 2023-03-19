@@ -23,6 +23,7 @@ import {useAuth0} from "@auth0/auth0-react";
 import UNited_logo from '../assets/united_logo_no_bg_white.png';
 import {BiFilterAlt, BiSearch, BiSortAlt2} from "react-icons/bi";
 import axios from "axios";
+import {useLocation, useNavigate} from "react-router-dom";
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
@@ -36,7 +37,10 @@ function TopNavBar() {
 
     const {loginWithRedirect} = useAuth0();
     const {logout} = useAuth0();
-    const {user, isAuthenticated, getAccessTokenSilently} = useAuth0();
+    const {user, isAuthenticated, getAccessTokenSilently, isLoading} = useAuth0();
+
+    const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
         if (selectedOption !== "") {
@@ -104,7 +108,7 @@ function TopNavBar() {
         <AppBar position="fixed" sx={{backgroundColor: "#0c4c8a"}}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                    <ButtonBase onClick={() => console.log("")}
+                    <ButtonBase onClick={() => navigate("/")}
                                 sx={{
                                     width: "9%",
                                     maxWidth: {xs: "100%", md: "80vw"},

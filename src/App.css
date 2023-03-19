@@ -7,3 +7,20 @@
 .Content{
   padding: 15vh 4vw;
 }
+
+.sidebar ul {
+  list-style: none;
+  display: block;
+  padding: 0vh 2vh;
+}
+
+.sidebar ul li {
+  position: relative;
+}
+
+.sidebar ul li a {
+  text-decoration: none;
+  color: #000000;
+  display: block;
+  padding: 1vh;
+}

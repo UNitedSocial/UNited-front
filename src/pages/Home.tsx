@@ -9,11 +9,11 @@ import {Grid} from "@mui/material";
 function Home() {
     return (<>
 
-        <TopNavBar/>
+        <Router>
 
-        <div className={"Content"}>
+            <TopNavBar/>
 
-            <Router>
+            <div className={"Content"}>
 
                 <Grid container>
                     <Grid item xs={3}>
@@ -32,16 +32,17 @@ function Home() {
 
                     <Grid item xs={3}>
                         <Grid container justifyContent="center">
-                            <UtilityMenu/>
+                            <>
+                            </>
                         </Grid>
                     </Grid>
 
                 </Grid>
 
-            </Router>
+            </div>
 
+        </Router>
 
-        </div>
     </>)
 }
 

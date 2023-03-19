@@ -13,13 +13,29 @@ function UtilityMenu() {
         <Paper>
             <Card sx={{maxWidth: {xs: "60%", md: "100%"}}} style={{background: "#EFECEB"}}>
                 <CardActions>
-                    <Stack>
-                        <Link to="/">
-                            Home
-                        </Link>
-                        <Link to="/group">
-                            Crear grupo
-                        </Link>
+                    <Stack className="sidebar">
+                        <ul>
+                            <li>
+                                <Link to="/">
+                                    Home
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/new/group">
+                                    Crear grupo
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/">
+                                    -
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/">
+                                    -
+                                </Link>
+                            </li>
+                        </ul>
                     </Stack>
                 </CardActions>
             </Card>
