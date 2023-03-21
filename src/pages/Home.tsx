@@ -5,6 +5,7 @@ import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import UtilityMenu from "../components/utilityMenu/UtilityMenu";
 import React from "react";
 import {Grid} from "@mui/material";
+import UserProfile from "../components/userProfile/UserProfile";
 
 function Home() {
     return (<>
@@ -23,10 +24,10 @@ function Home() {
                     </Grid>
 
                     <Grid item xs={6}>
-
                         <Routes>
                             <Route path="/" element={<Feed/>}/>
                             <Route path="/new/group" element={<GroupForm/>}/>
+                            <Route path="/profile" element={<UserProfile/>}/>
                         </Routes>
                     </Grid>
 

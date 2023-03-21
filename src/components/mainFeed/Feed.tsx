@@ -1,8 +1,8 @@
 import "./feed.css"
-import Post from '../post/Post'
 import {useEffect, useState} from "react";
 import {Alert, AlertTitle, Box, CircularProgress, Stack} from "@mui/material";
 import GroupCard from "../groupCard/GroupCard";
+import axios from "axios";
 
 export default function Feed() {
 
@@ -15,9 +15,8 @@ export default function Feed() {
     }, []);
 
     async function loadPosts() {
-        const response = await fetch('http://localhost:3002/api/groups?n=5');
-        const data = await response.json();
-        return data;
+        const response = await axios.get('http://localhost:3002/api/groups?n=5');
+        return await response.data;
     }
 
     const loadedPosts = (data: Array<any>) => {

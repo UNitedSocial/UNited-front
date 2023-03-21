@@ -1,4 +1,4 @@
-import {Card, CardActions, Paper, Stack} from "@mui/material";
+import {Card, CardActions, CardContent, Paper, Stack} from "@mui/material";
 import * as React from "react";
 import {Link} from "react-router-dom";
 
@@ -10,9 +10,8 @@ function UtilityMenu() {
 
 
     return (
-        <Paper>
-            <Card sx={{maxWidth: {xs: "60%", md: "100%"}}} style={{background: "#EFECEB"}}>
-                <CardActions>
+            <Card sx={{maxWidth: {xs: "60%", md: "100%"}}} style={{background: "#EFECEB"}} variant="outlined">
+                <CardContent>
                     <Stack className="sidebar">
                         <ul>
                             <li>
@@ -25,21 +24,10 @@ function UtilityMenu() {
                                     Crear grupo
                                 </Link>
                             </li>
-                            <li>
-                                <Link to="/">
-                                    -
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="/">
-                                    -
-                                </Link>
-                            </li>
                         </ul>
                     </Stack>
-                </CardActions>
+                </CardContent>
             </Card>
-        </Paper>
 
     )
 }

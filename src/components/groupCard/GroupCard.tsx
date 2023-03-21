@@ -17,7 +17,7 @@ function GroupCard(groupElement: Group) {
 
     return (
 
-        <Card sx={{maxWidth: {xs: "60%", md: "35vw"}}} style={{background: "#EFECEB"}}>
+        <Card sx={{maxWidth: {xs: "60%", md: "50vw"}}} style={{background: "#EFECEB"}} variant="outlined">
             <CardMedia
                 sx={{height: 194}}
                 image={info.referenceImg}
@@ -34,8 +34,7 @@ function GroupCard(groupElement: Group) {
             <CardActions>
                 <Button size="small">Unete</Button>
             </CardActions>
-        </Card>
-    );
+        </Card>);
 
 }
 
