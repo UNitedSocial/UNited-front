@@ -1,4 +1,4 @@
-    import "../App.css"
+import "../App.css"
 import {
     Alert,
     AppBar, Autocomplete,
@@ -8,19 +8,30 @@ import {
     Container, Grid,
     IconButton,
     Menu,
-    MenuItem, Paper, Snackbar, TextField,
+    MenuItem, Paper, Snackbar, TextField, Button,
     Toolbar,
     Tooltip,
     Typography
 } from "@mui/material";
-import React, {useEffect, useState} from "react";
-import {useAuth0} from "@auth0/auth0-react";
+import React, { useEffect, useState } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
 import UNited_logo from '../assets/united_logo_no_bg_white.png';
-import {BiFilterAlt, BiSearch, BiSortAlt2} from "react-icons/bi";
+import { BiFilterAlt, BiSearch, BiSortAlt2 } from "react-icons/bi";
+import { useNavigate, Link } from 'react-router-dom'
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const pages = ['Contact Us'];
 
-function TopNavBar(){
+function TopNavBar() {
+
+
+    const [nav, setNav] = useState(false);
+
+
+
+    const openNav = () => {
+        setNav(!nav);
+    };
 
     const [openToast, setOpenToast] = useState(false);
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -28,13 +39,13 @@ function TopNavBar(){
     const [value, setValue] = useState('');
     const [inputValue, setInputValue] = useState('');
 
-    const {loginWithRedirect} = useAuth0();
+    const { loginWithRedirect } = useAuth0();
     const { logout } = useAuth0();
     const { user, isAuthenticated, isLoading } = useAuth0();
 
     useEffect(() => {
-        if(selectedOption !== ""){
-            if(selectedOption === "Logout"){
+        if (selectedOption !== "") {
+            if (selectedOption === "Logout") {
                 logout();
             }
         }
@@ -47,7 +58,7 @@ function TopNavBar(){
 
 
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-        if(isAuthenticated){
+        if (isAuthenticated) {
             setAnchorElUser(event.currentTarget);
         } else {
             loginWithRedirect().then(() => setOpenToast(true));
@@ -60,7 +71,7 @@ function TopNavBar(){
         const target = event.target as HTMLElement;
         const textContentHandle = target.textContent;
 
-        if(textContentHandle !== null){
+        if (textContentHandle !== null) {
             setSelectedOption(textContentHandle);
         } else {
             setSelectedOption("");
@@ -68,9 +79,14 @@ function TopNavBar(){
         setAnchorElUser(null);
     };
 
+    const handleClick = () => {
+
+
+    };
+
     const handleSearchClick = () => {
         let search;
-        if(inputValue !== ""){
+        if (inputValue !== "") {
             search = inputValue;
         } else {
             search = value;
@@ -78,20 +94,24 @@ function TopNavBar(){
         handleSearch(search);
     }
 
-    const handleSearch = (search : String) => {
+    const handleSearch = (search: String) => {
         console.log("Searched: " + search);
     }
 
-    return(
+    return (
+
+
+
+
         <AppBar position="fixed" sx={{ backgroundColor: "#0c4c8a" }}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <ButtonBase onClick={() => console.log("")}
-                                sx={{
-                                    width: "9%",
-                                    maxWidth: { xs: "100%", md: "80vw" },
-                                    maxHeight: { xs: "50vh", md: "60vh" }
-                                }}>
+                        sx={{
+                            width: "9%",
+                            maxWidth: { xs: "100%", md: "80vw" },
+                            maxHeight: { xs: "50vh", md: "60vh" }
+                        }}>
                         <Box
                             component="img"
                             sx={{
@@ -104,7 +124,7 @@ function TopNavBar(){
                     </ButtonBase>
 
                     <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
-                        <Box sx={{ flexGrow: 2, display: 'contents'}}>
+                        <Box sx={{ flexGrow: 2, display: 'contents' }}>
                             <Paper sx={{
                                 height: "auto",
                                 width: "35%",
@@ -153,12 +173,28 @@ function TopNavBar(){
                                 </Grid>
                             </Paper>
                             <IconButton type="button" aria-label="filer">
-                                <BiFilterAlt color="#fefefe"/>
+                                <BiFilterAlt color="#fefefe" />
                             </IconButton>
                             <IconButton type="button" aria-label="sort">
-                                <BiSortAlt2 color="#fefefe"/>
+                                <BiSortAlt2 color="#fefefe" />
                             </IconButton>
                         </Box>
+
+                    </Box>
+
+                    <Box sx={{ flexGrow: 0.03, display: { xs: 'none', md: 'flex' } }}>
+
+                        <Button
+                            key={pages[0]}
+                            onClick={handleClick}
+
+                            sx={{ my: 2, color: 'white', display: 'block' }}
+                        >
+                            {pages[0]}
+
+
+                        </Button>
+
 
                     </Box>
 
