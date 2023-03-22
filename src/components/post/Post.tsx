@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import  { useState } from 'react'
 import "./post.css"
 import {MoreVert,ThumbUp,GroupAdd} from "@mui/icons-material"
-import {Users} from "../../data"
+import {Users,Groups} from "../../data"
 export {}
 
 export default function Post({ post }: any) {
@@ -14,15 +14,15 @@ export default function Post({ post }: any) {
         <div className="postTop">
             <div className="postTopLeft">
                 <img className='postProfileImg'
-                 src={Users.filter((u) => u.id === post.userId)[0].profilePicture} 
+                 src={Groups.filter((u) => u.id === post.userId)[0].profilePicture} 
                 alt="" />
                 <span className="postUsername">
-                  {Users.filter((u) => u.id === post.userId)[0].username}
+                  {Groups.filter((u) => u.id === post.userId)[0].username}
                   </span>
                 <span className="postDate">{post.date}</span>
             </div>
             <div className="postTopRight">
-                <GroupAdd />
+                <MoreVert />
             </div>
         </div>
         <div className="postCenter">

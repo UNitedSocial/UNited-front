@@ -1,4 +1,4 @@
-export const Users = [
+export const Groups = [
     {
       id:1,
       profilePicture: "../assets/persons/1.jpg",
@@ -13,6 +13,25 @@ export const Users = [
       id:3,
       profilePicture: "assets/persons/3.jpg",
       username: "Nombre de grupo",
+    },
+   
+  ];
+
+  export const Users = [
+    {
+      id:1,
+      profilePicture: "../assets/persons/1.jpg",
+      username: "persona 1",
+    },
+    {
+      id:2,
+      profilePicture: "assets/persons/2.png",
+      username: "persona 2",
+    },
+    {
+      id:3,
+      profilePicture: "assets/persons/3.jpg",
+      username: "persona 3",
     },
    
   ];
