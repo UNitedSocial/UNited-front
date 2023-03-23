@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {useEffect, useState} from 'react';
+import ImageUploadForm from './ImageUploadForm';
 
 import "./groupForm.css"
 import {
@@ -132,6 +133,8 @@ function GroupForm() {
     }
 
     return (<Box maxWidth="xl" style={{position: 'relative'}}>
+
+        <ImageUploadForm onSubmit={handleSubmit} />/
 
         <Grid container spacing={2}>
             <Grid item xs={4}>
