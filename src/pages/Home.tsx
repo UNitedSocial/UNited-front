@@ -6,6 +6,11 @@ import UtilityMenu from "../components/utilityMenu/UtilityMenu";
 import React from "react";
 import {Grid} from "@mui/material";
 import UserProfile from "../components/userProfile/UserProfile";
+import Leftbar from "../components/leftBar/Leftbar"
+
+
+
+
 
 function Home() {
     return (<>
@@ -13,6 +18,8 @@ function Home() {
         <Router>
 
             <TopNavBar/>
+
+            <Leftbar/>
 
             <div className={"Content"}>
 

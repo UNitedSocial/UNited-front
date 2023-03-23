@@ -18,16 +18,26 @@ import {
     Tooltip,
     Typography
 } from "@mui/material";
-import React, {useEffect, useState} from "react";
-import {useAuth0} from "@auth0/auth0-react";
+import React, { useEffect, useState } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
 import UNited_logo from '../assets/united_logo_no_bg_white.png';
-import {BiFilterAlt, BiSearch, BiSortAlt2} from "react-icons/bi";
+import { BiFilterAlt, BiSearch, BiSortAlt2 } from "react-icons/bi";
+import { useNavigate, Link } from 'react-router-dom'
 import axios from "axios";
-import {useLocation, useNavigate} from "react-router-dom";
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const pages = ['Contact Us'];
 
 function TopNavBar() {
+
+
+    const [nav, setNav] = useState(false);
+
+
+
+    const openNav = () => {
+        setNav(!nav);
+    };
 
     const [openToast, setOpenToast] = useState(false);
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -90,6 +100,11 @@ function TopNavBar() {
         setAnchorElUser(null);
     };
 
+    const handleClick = () => {
+
+
+    };
+
     const handleSearchClick = () => {
         handleSearch(value);
     }
@@ -146,7 +161,6 @@ function TopNavBar() {
                                                 setValue(event.target.value);
                                             }}
                                         />
-
                                     </Grid>
                                     <Grid item xs={1.2}>
                                         <IconButton type="button" aria-label="search" onClick={handleSearchClick}>
@@ -165,7 +179,23 @@ function TopNavBar() {
 
                     </Box>
 
-                    <Box sx={{flexGrow: 0}}>
+                    <Box sx={{ flexGrow: 0.03, display: { xs: 'none', md: 'flex' } }}>
+
+                        <Button
+                            key={pages[0]}
+                            onClick={handleClick}
+
+                            sx={{ my: 2, color: 'white', display: 'block' }}
+                        >
+                            {pages[0]}
+
+
+                        </Button>
+
+
+                    </Box>
+
+                    <Box sx={{ flexGrow: 0 }}>
                         <Tooltip title={isAuthenticated ? "Open settings" : "Login"}>
                             <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
                                 <Avatar src={user?.picture}/>
