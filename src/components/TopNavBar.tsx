@@ -4,7 +4,7 @@ import {
     AppBar,
     Autocomplete,
     Avatar,
-    Box,
+    Box, Button,
     ButtonBase,
     Container,
     Grid,
@@ -22,7 +22,7 @@ import React, { useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import UNited_logo from '../assets/united_logo_no_bg_white.png';
 import { BiFilterAlt, BiSearch, BiSortAlt2 } from "react-icons/bi";
-import { useNavigate, Link } from 'react-router-dom'
+import {useNavigate, Link, useLocation} from 'react-router-dom'
 import axios from "axios";
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -184,7 +184,6 @@ function TopNavBar() {
                         <Button
                             key={pages[0]}
                             onClick={handleClick}
-
                             sx={{ my: 2, color: 'white', display: 'block' }}
                         >
                             {pages[0]}

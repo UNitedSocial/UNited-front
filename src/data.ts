@@ -6,12 +6,12 @@ export const Groups = [
     },
     {
       id:2,
-      profilePicture: "assets/persons/2.png",
+      profilePicture: "../assets/persons/2.png",
       username: "Info general Unal",
     },
     {
       id:3,
-      profilePicture: "assets/persons/3.jpg",
+      profilePicture: "../assets/persons/2.png",
       username: "Nombre de grupo",
     },
    
@@ -25,15 +25,14 @@ export const Groups = [
     },
     {
       id:2,
-      profilePicture: "assets/persons/2.png",
+      profilePicture: "../assets/persons/2.png",
       username: "persona 2",
     },
     {
       id:3,
-      profilePicture: "assets/persons/3.jpg",
+      profilePicture: "../assets/persons/2.png",
       username: "persona 3",
     },
-   
   ];
   
   export const Posts = [

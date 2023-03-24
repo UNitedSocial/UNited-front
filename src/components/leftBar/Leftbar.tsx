@@ -1,42 +1,43 @@
 import './leftbar.css'
-import {RssFeed, PlayCircleFilledOutlined,Group
-        ,Event} from '@mui/icons-material'
 import {Users} from "../../data"
 import GroupMember from '../groupMember/GroupMember'
+import {Card, CardContent, Divider, Stack, Typography} from "@mui/material";
+import {Link} from "react-router-dom";
+import * as React from "react";
+import {BiCalendar, BiVideo} from "react-icons/bi";
 
 export default function LeftBar() {
-    return(
-        <div className='sidebar'>
-            <div className="sidebarWrapper">
-                <ul className="sidebarList">
-                    <li className="sidebarListItem">
-                        <PlayCircleFilledOutlined className='sidebarIcon'/>
-                        <span className="sidebarListItemText">Videos</span>
-                    </li>
+    return (
+        <Card sx={{maxWidth: {xs: "60%", md: "80%"}}} style={{background: "#EFECEB"}} variant="outlined">
+            <CardContent>
+                <Stack className="sidebarUtilityMenu">
+                    <ul>
+                        <li>
+                            <Link to="/">
+                                <BiVideo size={28}/> <span>Videos</span>
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to="/new/group">
+                                <BiCalendar size={28} style={{paddingBottom: 3}}/> <span>Eventos</span>
+                            </Link>
+                        </li>
+                    </ul>
+                </Stack>
+                <Divider/>
+                <Typography variant="inherit" component="div" sx={{mt: 2, mb: 2}} className="sidebarUtilityTitle">
+                    <strong>
+                        Miembros del grupo:
+                    </strong>
+                </Typography>
 
-                    <li className="sidebarListItem">
-                        <Event className='sidebarIcon'/>
-                        <span className="sidebarListItemText">Eventos</span>
-                    </li>
-                    <li className="sidebarListItem">
-                        <RssFeed className='sidebarIcon'/>
-                        <span className="sidebarListItemText">asdasda</span>
-                    </li>
-                </ul>
-
-                
-                <hr className='sidebarHr'/>
-                <li className="sidebarListItem">
-                        <Group className='sidebarIcon'/>
-                        <span className="sidebarItemText">Miembros del grupo:</span>
-                </li>
-                <ul className="sidebarFriendList">
-                    {Users.map(u=> (
+                <Stack>
+                    {Users.map(u => (
                         <GroupMember key={u.id} user={u}/>
                     ))}
-                </ul>
-                <button className='sidebarButton'>Show More</button>
-            </div>
-        </div>
+
+                </Stack>
+            </CardContent>
+        </Card>
     )
 }
