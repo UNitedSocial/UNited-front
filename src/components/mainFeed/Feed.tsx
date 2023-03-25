@@ -2,7 +2,7 @@ import "./feed.css"
 import {useEffect, useState} from "react";
 import {Alert, AlertTitle, Box, CircularProgress, Stack} from "@mui/material";
 import GroupCard from "../groupCard/GroupCard";
-import axios from "axios";
+import {loadPosts} from "../../backendConnection/loadPosts";
 
 export default function Feed() {
 
@@ -13,11 +13,6 @@ export default function Feed() {
     useEffect(() => {
         loadPosts().then(data => loadedPosts(data)).catch(error => errorLoading(error));
     }, []);
-
-    async function loadPosts() {
-        const response = await axios.get('http://localhost:3002/api/groups?n=5');
-        return await response.data;
-    }
 
     const loadedPosts = (data: Array<any>) => {
         try {
@@ -72,16 +67,6 @@ export default function Feed() {
             </>
         )
     }
-
-    /*return (
-      <div className='feed'>
-        <div className="feedWrapper">
-          {Posts.map((p:any) =>(
-            <Post key = {p.id} post ={p}/>
-          ))}
-        </div>
-      </div>
-    )*/
 
     return (
         <>

@@ -5,11 +5,6 @@ import "./UtilityMenu.css"
 
 function UtilityMenu() {
 
-    function handleClick(button: string) {
-        console.log(button);
-    }
-
-
     return (
             <Card sx={{maxWidth: {xs: "60%", md: "100%"}}} style={{background: "#EFECEB"}} variant="outlined">
                 <CardContent>

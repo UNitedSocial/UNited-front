@@ -24,8 +24,6 @@ function UserProfile() {
         )
     }
 
-    console.log(user)
-
     return (
 
         <Card sx={{maxWidth: {xs: "60%", md: "50vw"}}} style={{background: "#EFECEB"}} variant="outlined">

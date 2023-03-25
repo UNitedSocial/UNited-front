@@ -1,7 +1,7 @@
 import "../src/styles/styles.css";
 import Home from "./pages/Home"
-import Contact from "./pages/Contact"
-import Group from "./pages/Group"
+import ContactForm from "./components/contactForm/ContactForm"
+import Group from "./components/groupPage/Group"
 import './App.css';
 import { Route, Routes } from "react-router-dom";
 

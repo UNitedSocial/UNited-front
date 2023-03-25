@@ -1,6 +1,6 @@
 import './rightBar.css'
 import {Group} from '@mui/icons-material'
-import {Users,Groups} from "../../data"
+import {Users,Groups} from "../../../data"
 import GroupMember from '../groupMember/GroupMember'
 import {BiCalendar, BiVideo} from "react-icons/bi";
 import {Card, CardContent, Divider, Stack, Typography} from "@mui/material";
