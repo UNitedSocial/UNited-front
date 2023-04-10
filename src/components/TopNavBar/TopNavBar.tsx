@@ -1,4 +1,4 @@
-import "../App.css"
+import "../../App.css"
 import {
     Alert,
     AppBar,
@@ -20,18 +20,21 @@ import {
 } from "@mui/material";
 import React, {useEffect, useState} from "react";
 import {useAuth0} from "@auth0/auth0-react";
-import UNited_logo from '../assets/united_logo_no_bg_white.png';
+import UNited_logo from '../../assets/united_logo_no_bg_white.png';
 import {BiFilterAlt, BiSearch, BiSortAlt2} from "react-icons/bi";
 import {useLocation, useNavigate} from 'react-router-dom'
 import axios from "axios";
+import { postUserInformation } from "../../backendConnection/postUserInformation";
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
-const pages = ['ContactForm Us'];
+const pages = ['Contact Us'];
 
 function TopNavBar() {
 
 
     const [nav, setNav] = useState(false);
+
+
 
 
     const openNav = () => {
@@ -63,13 +66,13 @@ function TopNavBar() {
         setSelectedOption("")
     }, [selectedOption]);
 
+    useEffect(() => {
+        if(isAuthenticated){
+            postUserInformation(getAccessTokenSilently);
+        }
+    }, [isAuthenticated]);
+
     async function callProtectedAPI() {
-        const token = await getAccessTokenSilently();
-        const response = await axios.get("http://localhost:3002/protected", {
-            headers: {
-                authorization: "Bearer " + token,
-            }
-        })
     }
 
     /*useEffect(() => {

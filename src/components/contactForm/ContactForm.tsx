@@ -25,7 +25,6 @@ function ContactForm() {
                 ...formElement.contactForm, [page]: value
             }
         })
-        console.log(formElement)
     }
 
     const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {

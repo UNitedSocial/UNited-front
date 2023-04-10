@@ -1,4 +1,4 @@
-import TopNavBar from "../components/TopNavBar"
+import TopNavBar from "../components/TopNavBar/TopNavBar"
 import Feed from "../components/mainFeed/Feed"
 import GroupForm from "../components/groupForm/GroupForm"
 import {BrowserRouter as Router, Link, Route, Routes} from "react-router-dom";

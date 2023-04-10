@@ -17,11 +17,15 @@ import {MdGroupAdd} from "react-icons/md";
 import {loadGroup} from "../../backendConnection/loadGroup";
 import UNited_logo from "../../assets/united_logo_no_bg_white.png";
 import VerifiedButton from "../userPage/Verified/VerifiedButton";
+import {postUserGroupRequest} from "../../backendConnection/postUserGroupRequest";
+import {useAuth0} from "@auth0/auth0-react";
 
 
 function Group() {
 
     let {groupname} = useParams();
+
+    const {getAccessTokenSilently} = useAuth0();
 
 
     const [isLoading, setIsLoading] = useState(true);
@@ -35,7 +39,6 @@ function Group() {
     const loadedGroup = (data: any) => {
         try {
             setGroup(data);
-            console.log(data);
             setIsLoading(false);
         } catch {
             errorLoading(JSON.parse('{}'));
@@ -169,7 +172,7 @@ function Group() {
                                 pt: 0
                             }}
                         >
-                            <ButtonBase onClick={() => console.log("/")}>
+                            <ButtonBase onClick={() => postUserGroupRequest(groupname, getAccessTokenSilently)}>
                                 <MdGroupAdd color={"black"} size={30}/>
                             </ButtonBase>
                         </Box>

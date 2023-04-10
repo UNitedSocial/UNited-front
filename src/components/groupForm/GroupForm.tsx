@@ -29,6 +29,8 @@ import {DatePicker} from '@mui/x-date-pickers/DatePicker';
 import {useAuth0} from "@auth0/auth0-react";
 import {BsFacebook, BsInstagram, BsLinkedin, BsTwitter, BsYoutube} from "react-icons/bs";
 import axios from "axios";
+import {postGroup} from "../../backendConnection/postGroup";
+import group from "../groupPage/Group";
 
 const options = ['Académico', 'Deportivo', 'Ocio', 'Otro',];
 
@@ -36,10 +38,10 @@ const topicOptions = ['Ingeniería'];
 
 function GroupForm() {
 
-    const {user, isAuthenticated, getAccessTokenSilently, isLoading} = useAuth0();
+    const {getAccessTokenSilently} = useAuth0();
     const [isPosting, setIsPosting] = useState(false)
     const [groupElement, setGroupElement] = useState({
-        username: user?.email, group: {
+        username: "i1", group: {
             info: {
                 name: "",
                 description: "",
@@ -65,10 +67,7 @@ function GroupForm() {
                     mainProfessor: ""
                 },
                 fundationDate: null,
-                referenceImg: {
-                    preview: URL.createObjectURL(new Blob([], {type: 'application/octet-stream'})),
-                    raw: new Blob([], {type: 'application/octet-stream'})
-                }
+                referenceImg: "https://t4.ftcdn.net/jpg/04/81/13/43/360_F_481134373_0W4kg2yKeBRHNEklk4F9UXtGHdub3tYk.jpg"
             }
         }
     });
@@ -84,9 +83,9 @@ function GroupForm() {
     };
 
 
-    useEffect(() => {
+    /*useEffect(() => {
         setGroupElement({...groupElement, username: user?.email})
-    }, [isLoading, user]);
+    }, [isLoading, user]);*/
 
     function handleChangeInfo(page: string, value: string | boolean | null) {
         setGroupElement({
@@ -142,7 +141,7 @@ function GroupForm() {
             })
     }
 
-    function handleImageChange(event: any) {
+    /*function handleImageChange(event: any) {
 
         setGroupElement({
             ...groupElement, group: {
@@ -157,7 +156,7 @@ function GroupForm() {
             }
         });
 
-    }
+    }*/
 
 
     if (isPosting) {
@@ -203,6 +202,8 @@ function GroupForm() {
                     fullWidth={true}
                     label="Nombre del grupo"
                     variant="outlined"
+                    error={groupElement.group.info.name === ""}
+                    helperText={groupElement.group.info.name === "" ? "El nombre del grupo no puede estar vacío" : ""}
                     value={groupElement.group.info.name}
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                         handleChangeInfo("name", event.target.value);
@@ -469,6 +470,9 @@ function GroupForm() {
             </Grid>
         </Grid>
 
+        {/*
+        IMAGE HANDLER
+
         <Grid container spacing={2}>
             <Grid item xs={12}>
                 <Typography variant="h5" sx={{mt: 2}}>Subir imagen del grupo</Typography>
@@ -496,7 +500,7 @@ function GroupForm() {
                     />
                 </label>
             </Grid>
-        </Grid>
+        </Grid>*/}
 
         <Button variant="contained" sx={{mt: 4}} color="primary"
                 onClick={() => handleSubmit().then(() => setIsPosting(false)).catch(e => handleSubmitError(e))}>
@@ -513,13 +517,23 @@ function GroupForm() {
 
     async function handleSubmit() {
 
+        let error = false;
+
         if (isPosting) {
             return Promise.reject("Already handling request");
         }
 
         setIsPosting(true);
 
-        const response = await axios.post('http://localhost:3002/api/group', groupElement);
+        if(groupElement.group.info.name === "") {
+            setNotificationMessage("El nombre del grupo no puede estar vacío");
+            setOpenNotification(true);
+            error = true;
+        }
+
+        if(!error) {
+            await postGroup(groupElement, getAccessTokenSilently);
+        }
     }
 
     function handleSubmitError(e: any) {
