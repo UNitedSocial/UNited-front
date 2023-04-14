@@ -36,6 +36,7 @@ const options = ['Académico', 'Deportivo', 'Ocio', 'Otro',];
 
 const topicOptions = ['Ingeniería'];
 
+
 function GroupForm() {
 
     const {getAccessTokenSilently} = useAuth0();
@@ -81,6 +82,7 @@ function GroupForm() {
 
         setOpenNotification(false);
     };
+    
 
 
     /*useEffect(() => {
@@ -300,6 +302,8 @@ function GroupForm() {
                     multiline
                     fullWidth={true}
                     rows={4}
+                    error={groupElement.group.info.description.length < 15}
+                    helperText={groupElement.group.info.description.length < 15 ? "Campo de descripción obligatorio y mayor a 15 caracteres" : ""}                    
                     value={groupElement.group.info.description}
                     onChange={(newValue) => handleChangeInfo("description", newValue.target.value)}
                 />
@@ -317,16 +321,18 @@ function GroupForm() {
                             <Chip variant="outlined" label={option} {...getTagProps({index})} />
                         ))
                     }
+                                      
                     value={groupElement.group.info.topics}
                     onChange={(event: any, newValue: any) => {
-                        handleChangeInfo("topics", newValue)
+                        handleChangeInfo("topics", newValue)                        
+
                     }}
                     renderInput={(params) => (
                         <TextField
                             {...params}
                             variant="outlined"
                             label="Topics"
-                            placeholder="Topics"
+                            placeholder="Topics"                            
                         />
                     )}
                 />
@@ -340,6 +346,8 @@ function GroupForm() {
                     fullWidth={true}
                     label="Correo"
                     variant="outlined"
+                    error={groupElement.group.info.contact.mail === ""}
+                    helperText={groupElement.group.info.contact.mail ==="" ? "El correo es obligatorio" : ""} 
                     value={groupElement.group.info.contact.mail}
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                         handleChangeContact("mail", event.target.value);
@@ -364,6 +372,8 @@ function GroupForm() {
                     fullWidth={true}
                     label="Teléfono"
                     variant="outlined"
+                    error={groupElement.group.info.contact.cellphone === ""}
+                    helperText={groupElement.group.info.contact.cellphone ==="" ? "El Telefono es obligatorio" : ""} 
                     value={groupElement.group.info.contact.cellphone}
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                         handleChangeContact("cellphone", event.target.value);

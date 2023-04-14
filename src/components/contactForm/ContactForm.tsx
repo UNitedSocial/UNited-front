@@ -101,6 +101,8 @@ function ContactForm() {
                                 fullWidth={true}
                                 label="Nombre del grupo"
                                 variant="outlined"
+                                error={formElement.contactForm.name === ""}
+                                helperText={formElement.contactForm.name ==="" ? "El nombre es requerido" : ""} 
                                 value={formElement.contactForm.name}
                                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                                     handleChangeForm("name", event.target.value);
@@ -111,6 +113,8 @@ function ContactForm() {
                                 fullWidth={true}
                                 label="Nombre del grupo"
                                 variant="outlined"
+                                error={formElement.contactForm.email === ""}
+                                helperText={formElement.contactForm.email ==="" ? "El correo es requerido" : ""} 
                                 value={formElement.contactForm.email}
                                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                                     handleChangeForm("email", event.target.value);
@@ -121,6 +125,8 @@ function ContactForm() {
                                 multiline
                                 fullWidth={true}
                                 rows={4}
+                                error={formElement.contactForm.message === ""}
+                                helperText={formElement.contactForm.message ==="" ? "El mensaje es obligatorio" : ""} 
                                 value={formElement.contactForm.message}
                                 onChange={(newValue) => handleChangeForm("message", newValue.target.value)}
                             />
