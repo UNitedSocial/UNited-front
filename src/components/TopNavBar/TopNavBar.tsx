@@ -102,12 +102,8 @@ function TopNavBar() {
         setAnchorElUser(null);
     };
 
-    const handleClick = () => {
-
-
-    };
-
-    const handleSearchClick = () => {
+    const handleSearchClick = (e: any) => {
+        e.preventDefault();
         handleSearch(value);
     }
 
@@ -137,7 +133,7 @@ function TopNavBar() {
                     </ButtonBase>
 
                     <Box sx={{flexGrow: 1, display: 'flex', justifyContent: 'center'}}>
-                        <Box sx={{flexGrow: 2, display: 'contents'}}>
+                        <Box component="form" onSubmit={handleSearchClick} noValidate sx={{flexGrow: 2, display: 'contents'}}>
                             <Paper sx={{
                                 height: "auto",
                                 width: "35%",
@@ -165,7 +161,7 @@ function TopNavBar() {
                                         />
                                     </Grid>
                                     <Grid item xs={1.2}>
-                                        <IconButton type="button" aria-label="search" onClick={handleSearchClick}>
+                                        <IconButton type="submit" aria-label="search" onClick={handleSearchClick}>
                                             <BiSearch/>
                                         </IconButton>
                                     </Grid>

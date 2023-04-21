@@ -70,9 +70,7 @@ function ContactForm() {
                                 color: "#706f7b",
                                 lineHeight: "1.6",
                             }}>
-                                Estamos complacidos en responder cualquier pregunta que puedas tener. Envíanos un
-                                mensaje y tan pronto lo
-                                recibamos, te estaremos respondiendo.
+                                Estaremos encantados de responder cualquier pregunta que puedas tener. Tan pronto como recibamos tu mensaje, te responderemos lo antes posible.
                             </p>
                             <a href="https://wa.me/+573004567869" target="_blank" style={{
                                 textDecoration: "none",

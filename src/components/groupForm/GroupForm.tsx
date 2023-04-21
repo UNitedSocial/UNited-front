@@ -1,9 +1,9 @@
 import * as React from 'react';
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 
 import "./groupForm.css"
 import {
-    Alert,
+    Alert, AlertColor,
     Autocomplete,
     Box,
     Button,
@@ -14,7 +14,6 @@ import {
     FormControlLabel,
     Grid,
     InputAdornment,
-    InputBase,
     InputLabel,
     MenuItem,
     Select,
@@ -28,21 +27,53 @@ import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 import {DatePicker} from '@mui/x-date-pickers/DatePicker';
 import {useAuth0} from "@auth0/auth0-react";
 import {BsFacebook, BsInstagram, BsLinkedin, BsTwitter, BsYoutube} from "react-icons/bs";
-import axios from "axios";
 import {postGroup} from "../../backendConnection/postGroup";
-import group from "../groupPage/Group";
+import {isValidEmail} from "../../validations/isValidEmail";
+import {isValidPhoneNumber} from "../../validations/isValidPhoneNumber";
 
 const options = ['Académico', 'Deportivo', 'Ocio', 'Otro',];
 
 const topicOptions = ['Ingeniería'];
 
+interface GroupElement {
+    username: string;
+    group: {
+        info: {
+            name: string;
+            description: string;
+            contact: {
+                mail: string;
+                page: string;
+                cellphone: string;
+                socialNetworks: {
+                    facebook: string;
+                    instagram: string;
+                    linkedin: string;
+                    twitter: string;
+                    youtube: string;
+                };
+            };
+            topics: string[];
+            classification: string;
+            isRecognized: boolean;
+            recognizedInfo?: {
+                type?: string | undefined;
+                faculty?: string | undefined;
+                department?: string | undefined;
+                mainProfessor?: string | undefined;
+            };
+            fundationDate: string | null;
+            referenceImg: string;
+        };
+    };
+}
+
 
 function GroupForm() {
 
-    const {getAccessTokenSilently} = useAuth0();
-    const [isPosting, setIsPosting] = useState(false)
-    const [groupElement, setGroupElement] = useState({
-        username: "i1", group: {
+    const newGroupElement: GroupElement = {
+        username: "i1",
+        group: {
             info: {
                 name: "",
                 description: "",
@@ -71,18 +102,27 @@ function GroupForm() {
                 referenceImg: "https://t4.ftcdn.net/jpg/04/81/13/43/360_F_481134373_0W4kg2yKeBRHNEklk4F9UXtGHdub3tYk.jpg"
             }
         }
-    });
+    }
+
+    const {getAccessTokenSilently} = useAuth0();
+    const [isPosting, setIsPosting] = useState(false)
+    const [groupElement, setGroupElement] = useState<GroupElement>({...newGroupElement});
     const [openNotification, setOpenNotification] = useState(false);
     const [notificationMessage, setNotificationMessage] = useState("");
+    const [notificationSeverity, setNotificationSeverity] = useState<AlertColor>("info");
+
+    const notify = (message: string, severity: AlertColor) => {
+        setNotificationMessage(message);
+        setNotificationSeverity(severity);
+        setOpenNotification(true);
+    }
 
     const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') {
             return;
         }
-
         setOpenNotification(false);
     };
-    
 
 
     /*useEffect(() => {
@@ -250,7 +290,7 @@ function GroupForm() {
                         fullWidth={true}
                         label="Tipo de grupo"
                         variant="outlined"
-                        value={groupElement.group.info.recognizedInfo.type}
+                        value={groupElement.group.info.recognizedInfo?.type}
                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                             handleChangeRecognizedInfo("type", event.target.value);
                         }}
@@ -262,7 +302,7 @@ function GroupForm() {
                         fullWidth={true}
                         label="Facultad"
                         variant="outlined"
-                        value={groupElement.group.info.recognizedInfo.faculty}
+                        value={groupElement.group.info.recognizedInfo?.faculty}
                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                             handleChangeRecognizedInfo("faculty", event.target.value);
                         }}
@@ -274,7 +314,7 @@ function GroupForm() {
                         fullWidth={true}
                         label="Departamento"
                         variant="outlined"
-                        value={groupElement.group.info.recognizedInfo.department}
+                        value={groupElement.group.info.recognizedInfo?.department}
                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                             handleChangeRecognizedInfo("department", event.target.value);
                         }}
@@ -286,7 +326,7 @@ function GroupForm() {
                         fullWidth={true}
                         label="Profesor"
                         variant="outlined"
-                        value={groupElement.group.info.recognizedInfo.mainProfessor}
+                        value={groupElement.group.info.recognizedInfo?.mainProfessor}
                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                             handleChangeRecognizedInfo("mainProfessor", event.target.value);
                         }}
@@ -303,7 +343,7 @@ function GroupForm() {
                     fullWidth={true}
                     rows={4}
                     error={groupElement.group.info.description.length < 15}
-                    helperText={groupElement.group.info.description.length < 15 ? "Campo de descripción obligatorio y mayor a 15 caracteres" : ""}                    
+                    helperText={groupElement.group.info.description.length < 15 ? "El campo de descripción debe tener al menos 15 caracteres" : ""}
                     value={groupElement.group.info.description}
                     onChange={(newValue) => handleChangeInfo("description", newValue.target.value)}
                 />
@@ -321,10 +361,10 @@ function GroupForm() {
                             <Chip variant="outlined" label={option} {...getTagProps({index})} />
                         ))
                     }
-                                      
+
                     value={groupElement.group.info.topics}
                     onChange={(event: any, newValue: any) => {
-                        handleChangeInfo("topics", newValue)                        
+                        handleChangeInfo("topics", newValue)
 
                     }}
                     renderInput={(params) => (
@@ -332,7 +372,7 @@ function GroupForm() {
                             {...params}
                             variant="outlined"
                             label="Topics"
-                            placeholder="Topics"                            
+                            placeholder="Topics"
                         />
                     )}
                 />
@@ -347,7 +387,7 @@ function GroupForm() {
                     label="Correo"
                     variant="outlined"
                     error={groupElement.group.info.contact.mail === ""}
-                    helperText={groupElement.group.info.contact.mail ==="" ? "El correo es obligatorio" : ""} 
+                    helperText={groupElement.group.info.contact.mail === "" ? "El correo es obligatorio" : ""}
                     value={groupElement.group.info.contact.mail}
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                         handleChangeContact("mail", event.target.value);
@@ -373,7 +413,7 @@ function GroupForm() {
                     label="Teléfono"
                     variant="outlined"
                     error={groupElement.group.info.contact.cellphone === ""}
-                    helperText={groupElement.group.info.contact.cellphone ==="" ? "El Telefono es obligatorio" : ""} 
+                    helperText={groupElement.group.info.contact.cellphone === "" ? "El Telefono es obligatorio" : ""}
                     value={groupElement.group.info.contact.cellphone}
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                         handleChangeContact("cellphone", event.target.value);
@@ -513,13 +553,13 @@ function GroupForm() {
         </Grid>*/}
 
         <Button variant="contained" sx={{mt: 4}} color="primary"
-                onClick={() => handleSubmit().then(() => setIsPosting(false)).catch(e => handleSubmitError(e))}>
+                onClick={() => handleSubmit().then(() => handleSuccess()).catch(e => handleSubmitError(e))}>
             Crear Grupo
         </Button>
 
         <Snackbar open={openNotification} autoHideDuration={6000} onClose={handleClose}>
-            <Alert onClose={handleClose} severity="error" sx={{width: '100%'}}>
-                {notificationMessage}
+            <Alert onClose={handleClose} severity={notificationSeverity} sx={{width: '100%'}}>
+                <div style={{whiteSpace: 'pre-line'}}>{notificationMessage}</div>
             </Alert>
         </Snackbar>
         <br/>
@@ -535,22 +575,57 @@ function GroupForm() {
 
         setIsPosting(true);
 
-        if(groupElement.group.info.name === "") {
-            setNotificationMessage("El nombre del grupo no puede estar vacío");
-            setOpenNotification(true);
-            error = true;
+        let errorArray: string[] = [];
+
+        if (groupElement.group.info.name === "") {
+            errorArray.push("El nombre es obligatorio");
         }
 
-        if(!error) {
+        if (groupElement.group.info.contact.cellphone === "") {
+            errorArray.push("El teléfono es obligatorio");
+        } else {
+            if(!(isValidPhoneNumber(groupElement.group.info.contact.cellphone))){
+                errorArray.push("El teléfono no es válido");
+            }
+        }
+
+        if (groupElement.group.info.contact.mail === "") {
+            errorArray.push("El correo es obligatorio");
+        } else {
+            if(!(isValidEmail(groupElement.group.info.contact.mail))){
+                errorArray.push("El correo no es válido");
+            }
+        }
+
+        if (groupElement.group.info.description.length < 15) {
+            errorArray.push("La descripción debe tener al menos 15 caracteres");
+        }
+
+        if (errorArray.length === 0) {
+            if (!groupElement.group.info.isRecognized) {
+                delete groupElement.group.info.recognizedInfo;
+            }
+
             await postGroup(groupElement, getAccessTokenSilently);
+        } else {
+            throw new Error(errorArray.join('\n'));
         }
     }
 
-    function handleSubmitError(e: any) {
-
+    function handleSuccess() {
         setIsPosting(false);
-        setNotificationMessage(e?.response?.data?.message);
-        setOpenNotification(true);
+        setGroupElement({...newGroupElement});
+
+    }
+
+    function handleSubmitError(e: any) {
+        setIsPosting(false);
+        console.log(e?.message);
+        if(e?.response?.data?.message === undefined){
+            notify(e?.message, "error");
+        } else {
+            notify(e?.response?.data?.message, "error");
+        }
     }
 }
 
