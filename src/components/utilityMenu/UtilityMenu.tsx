@@ -12,7 +12,7 @@ function UtilityMenu() {
                         <ul>
                             <li>
                                 <Link to="/">
-                                    Home
+                                    Inicio
                                 </Link>
                             </li>
                             <li>

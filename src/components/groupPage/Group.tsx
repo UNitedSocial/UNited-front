@@ -1,47 +1,38 @@
 import "./group.css"
 import {useParams} from "react-router-dom";
-import {
-    Alert,
-    AlertTitle,
-    Avatar,
-    Box,
-    ButtonBase,
-    CircularProgress,
-    Grid,
-    Paper,
-    Stack,
-    Typography
-} from "@mui/material";
+import {Alert, AlertTitle, Box, CircularProgress, Grid, Paper, Stack, Typography} from "@mui/material";
 import React, {useEffect, useState} from "react";
 import {MdGroupAdd} from "react-icons/md";
-import {loadGroup} from "../../backendConnection/loadGroup";
-import UNited_logo from "../../assets/united_logo_no_bg_white.png";
+import {getGroup} from "../../backendConnection/getGroup";
 import VerifiedButton from "../userPage/Verified/VerifiedButton";
 import {postUserGroupRequest} from "../../backendConnection/postUserGroupRequest";
 import {useAuth0} from "@auth0/auth0-react";
+import {getUserStateGroup} from "../../backendConnection/getUserStateGroup";
 
 
 function Group() {
 
     let {groupname} = useParams();
 
-    const {getAccessTokenSilently} = useAuth0();
-
+    const {getAccessTokenSilently, user} = useAuth0();
 
     const [isLoading, setIsLoading] = useState(true);
     const [hasErrorLoading, sethasErrorLoading] = useState<JSON | null>(null);
     const [group, setGroup] = useState<any>(null);
 
     useEffect(() => {
-        loadGroup(groupname).then(data => loadedGroup(data)).catch(error => errorLoading(error));
-    }, []);
+        getGroup(groupname).then(data => loadedGroup(data)).catch(error => errorLoading(error));
+        if(user !== undefined){
+            getUserStateGroup(groupname, user?.nickname).then()
+        }
+    }, [groupname, user]);
 
     const loadedGroup = (data: any) => {
         try {
             setGroup(data);
             setIsLoading(false);
         } catch {
-            errorLoading(JSON.parse('{}'));
+            errorLoading({} as JSON);
         }
     }
 
@@ -55,14 +46,14 @@ function Group() {
             <>
                 <Box
                     style={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)'
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)"
                     }}
                 >
                     <CircularProgress size={70}
-                                      sx={{color: '#0c4c8a'}}/>
+                                      sx={{color: "#0c4c8a"}}/>
                 </Box>
             </>
         )
@@ -71,17 +62,17 @@ function Group() {
     if (hasErrorLoading !== null) {
         return (
             <>
-                <Box maxWidth="false" style={{position: 'relative'}}>
+                <Box maxWidth="false" style={{position: "relative"}}>
 
                     <Stack
                         direction="column"
                         justifyContent="center"
                         alignItems="center"
                         spacing={5}
-                        sx={{width: '100%'}}>
-                        <Alert severity="error" sx={{width: '100%'}}>
+                        sx={{width: "100%"}}>
+                        <Alert severity="error" sx={{width: "100%"}}>
                             <AlertTitle>Error</AlertTitle>
-                            Couldn't retreive information
+                            Hubo un error al cargar el grupo
                         </Alert>
                     </Stack>
 
@@ -93,11 +84,11 @@ function Group() {
     return (<>
             <Paper
                 sx={{
-                    position: 'relative',
-                    color: '#fff',
-                    backgroundSize: 'cover',
-                    backgroundRepeat: 'no-repeat',
-                    backgroundPosition: 'center',
+                    position: "relative",
+                    color: "#fff",
+                    backgroundSize: "cover",
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "center",
                     backgroundImage: `url(../assets/persons/4.png)`,
                     height: "25vh",
                     width: "100%",
@@ -106,44 +97,44 @@ function Group() {
             >
                 <Box
                     sx={{
-                        position: 'absolute',
+                        position: "absolute",
                         top: 0,
                         bottom: 0,
                         right: 0,
                         left: 0,
-                        backgroundColor: 'rgba(0,0,0,.3)',
+                        backgroundColor: "rgba(0,0,0,.3)",
                     }}
                 />
             </Paper>
             <Paper
                 sx={{
-                    position: 'relative',
-                    color: '#EFECEB',
+                    position: "relative",
+                    color: "#EFECEB",
                     mb: 4,
                 }}
                 variant="outlined"
             >
                 <Box
                     sx={{
-                        position: 'absolute',
+                        position: "absolute",
                         top: 0,
                         bottom: 0,
                         right: 0,
                         left: 0,
-                        backgroundColor: '#EFECEB',
+                        backgroundColor: "#EFECEB",
                     }}
                 />
                 <Grid container>
                     <Grid item md={1} sx={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center'
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center"
                     }}>
                     </Grid>
                     <Grid item md={9}>
                         <Box
                             sx={{
-                                position: 'relative',
+                                position: "relative",
                                 p: 3,
                                 pr: 0,
                             }}
@@ -151,7 +142,7 @@ function Group() {
                             <Typography variant="h5" color="black" gutterBottom>
                                 {group.info.name}
                                 {group.info.isRecognized ?
-                                    <VerifiedButton />
+                                    <VerifiedButton/>
                                     : <></>}
                             </Typography>
                             <Typography variant="subtitle1" color="black" paragraph>
@@ -160,21 +151,27 @@ function Group() {
                         </Box>
                     </Grid>
                     <Grid item md={2} sx={{
-                        display: 'flex',
-                        justifyContent: 'center',
+                        display: "flex",
+                        justifyContent: "center",
                         mt: 3
                     }}>
                         <Box
                             sx={{
-                                position: 'relative',
+                                position: "relative",
                                 p: 3,
                                 pr: 0,
                                 pt: 0
                             }}
                         >
-                            <ButtonBase onClick={() => postUserGroupRequest(groupname, getAccessTokenSilently)}>
+                            <button onClick={() => postUserGroupRequest(groupname, getAccessTokenSilently)} style={{
+                                border: "none",
+                                background: "none",
+                                padding: "0",
+                                font: "inherit",
+                                cursor: "pointer"
+                            }}>
                                 <MdGroupAdd color={"black"} size={30}/>
-                            </ButtonBase>
+                            </button>
                         </Box>
                     </Grid>
                 </Grid>

@@ -11,14 +11,14 @@ function UserProfile() {
             <>
                 <Box
                     style={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)'
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)"
                     }}
                 >
                     <CircularProgress size={70}
-                                      sx={{color: '#0c4c8a'}}/>
+                                      sx={{color: "#0c4c8a"}}/>
                 </Box>
             </>
         )

@@ -1,13 +1,10 @@
-import './leftbar.css'
-import {Users} from "../../../data"
-import GroupMember from '../groupMember/GroupMember'
-import {Alert, AlertTitle, Box, Card, CardContent, CircularProgress, Divider, Stack, Typography} from "@mui/material";
-import {Link, useParams} from "react-router-dom";
+import "./leftbar.css"
+import GroupMember from "../groupMember/GroupMember"
+import {Card, CardContent, Stack, Typography} from "@mui/material";
+import {useParams} from "react-router-dom";
 import * as React from "react";
-import {BiCalendar, BiVideo} from "react-icons/bi";
 import {useEffect, useState} from "react";
-import {loadGroup} from "../../../backendConnection/loadGroup";
-import {loadGroupMembers} from "../../../backendConnection/loadGroupMembers";
+import {getGroupMembers} from "../../../backendConnection/getGroupMembers";
 
 export default function LeftBar() {
 
@@ -19,15 +16,16 @@ export default function LeftBar() {
     const [groupMembers, setGroupMembers] = useState<any>(null);
 
     useEffect(() => {
-        loadGroupMembers(groupname).then(data => loadedGroupMembers(data)).catch(error => errorLoading(error));
-    }, []);
+        getGroupMembers(groupname).then(data => loadedGroupMembers(data)).catch(error => errorLoading(error));
+    }, [groupname]);
 
     const loadedGroupMembers = (data: any) => {
         try {
+            if(data.length === 0) throw new Error("No hay miembros en el grupo");
             setGroupMembers(data);
             setIsLoading(false);
         } catch {
-            errorLoading(JSON.parse('{}'));
+            errorLoading({} as JSON);
         }
     }
 
@@ -36,14 +34,7 @@ export default function LeftBar() {
         setIsLoading(false);
     }
 
-    if (isLoading) {
-        return (
-            <>
-            </>
-        )
-    }
-
-    if (hasErrorLoading !== null) {
+    if (hasErrorLoading !== null || isLoading) {
         return (
             <>
             </>
@@ -51,9 +42,9 @@ export default function LeftBar() {
     }
 
     return (
-        <Card sx={{maxWidth: {xs: "60%", md: "80%"}}} style={{background: "#EFECEB"}} variant="outlined">
+        <Card sx={{maxWidth: {xs: "60%", md: "100%"}}} style={{background: "#EFECEB"}} variant="outlined">
             <CardContent>
-                <Stack className="sidebarUtilityMenu">
+                {/*<Stack className="sidebarUtilityMenu">
                     <ul>
                         <li>
                             <Link to="/">
@@ -61,13 +52,13 @@ export default function LeftBar() {
                             </Link>
                         </li>
                         <li>
-                            <Link to="/new/group">
+                            <Link to="/">
                                 <BiCalendar size={28} style={{paddingBottom: 3}}/> <span>Eventos</span>
                             </Link>
                         </li>
                     </ul>
                 </Stack>
-                <Divider/>
+                <Divider/>*/}
                 <Typography variant="inherit" component="div" sx={{mt: 2, mb: 2}} className="sidebarUtilityTitle">
                     <strong>
                         Miembros del grupo:
@@ -75,10 +66,9 @@ export default function LeftBar() {
                 </Typography>
 
                 <Stack>
-                    {groupMembers.map((u: { id: any; }) => (
-                        <GroupMember key={u.id} user={u}/>
+                    {groupMembers?.map((u: any, idx: any) => (
+                        <GroupMember key={idx} user={u}/>
                     ))}
-
                 </Stack>
             </CardContent>
         </Card>

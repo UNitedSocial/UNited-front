@@ -19,7 +19,7 @@ export default function Feed() {
             setPosts(data);
             setIsLoading(false);
         } catch {
-            errorLoading(JSON.parse('{}'));
+            errorLoading({} as JSON);
         }
     }
 
@@ -33,14 +33,14 @@ export default function Feed() {
             <>
                 <Box
                     style={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)'
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)"
                     }}
                 >
                     <CircularProgress size={70}
-                                      sx={{color: '#0c4c8a'}}/>
+                                      sx={{color: "#0c4c8a"}}/>
                 </Box>
             </>
         )
@@ -49,15 +49,15 @@ export default function Feed() {
     if (hasErrorLoading !== null) {
         return (
             <>
-                <Box maxWidth="false" style={{position: 'relative'}}>
+                <Box maxWidth="false" style={{position: "relative"}}>
 
                     <Stack
                         direction="column"
                         justifyContent="center"
                         alignItems="center"
                         spacing={5}
-                        sx={{width: '100%'}}>
-                        <Alert severity="error" sx={{width: '100%'}}>
+                        sx={{width: "100%"}}>
+                        <Alert severity="error" sx={{width: "100%"}}>
                             <AlertTitle>Error</AlertTitle>
                             Couldn't retreive information
                         </Alert>
@@ -70,7 +70,7 @@ export default function Feed() {
 
     return (
         <>
-            <Box maxWidth="xl" style={{position: 'relative'}}>
+            <Box maxWidth="xl" style={{position: "relative"}}>
 
                 <Stack
                     direction="column"

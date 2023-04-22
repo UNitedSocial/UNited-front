@@ -1,10 +1,13 @@
 import "./groupMember.css"
+import {Link} from "react-router-dom";
+import * as React from "react";
 
-export default function CloseFriend({user}:any) {
+export default function GroupMember({user}:any) {
   return (
     <li className="sidebarFriend">
-        <img className='sidebarFriendImg' src={user.profilePicture} alt="" />
-        <span className='sidearFriendName'>{user.username}</span>
+        <button onClick={() => console.log(user.username)} style={{ border: "none", background: "none", padding: "0", font: "inherit", cursor: "pointer" }}>
+            <span className="sidearFriendName">{user.username}</span>
+        </button>
     </li>
   )
 }

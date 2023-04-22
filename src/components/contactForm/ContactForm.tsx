@@ -28,7 +28,7 @@ function ContactForm() {
     }
 
     const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
-        if (reason === 'clickaway') {
+        if (reason === "clickaway") {
             return;
         }
 
@@ -40,14 +40,14 @@ function ContactForm() {
             <>
                 <Box
                     style={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)'
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)"
                     }}
                 >
                     <CircularProgress size={70}
-                                      sx={{color: '#0c4c8a'}}/>
+                                      sx={{color: "#0c4c8a"}}/>
                 </Box>
             </>
         )
@@ -55,7 +55,7 @@ function ContactForm() {
 
     return (
         <>
-            <Box maxWidth="xl" style={{position: 'relative'}}>
+            <Box maxWidth="xl" style={{position: "relative"}}>
 
                 <Grid container spacing={2}>
                     <Grid item xs={6}>
@@ -137,7 +137,7 @@ function ContactForm() {
                 </Grid>
 
                 <Snackbar open={openNotification} autoHideDuration={6000} onClose={handleClose}>
-                    <Alert onClose={handleClose} severity="error" sx={{width: '100%'}}>
+                    <Alert onClose={handleClose} severity="error" sx={{width: "100%"}}>
                         {notificationMessage}
                     </Alert>
                 </Snackbar>
@@ -153,7 +153,7 @@ function ContactForm() {
 
         setIsPosting(true);
 
-        const response = await axios.post('http://localhost:3002/api/group', formElement);
+        const response = await axios.post("http://localhost:3002/api/group", formElement);
     }
 
     function handleSubmitError(e: any) {

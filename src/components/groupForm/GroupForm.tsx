@@ -1,5 +1,5 @@
-import * as React from 'react';
-import {useState} from 'react';
+import * as React from "react";
+import {useState} from "react";
 
 import "./groupForm.css"
 import {
@@ -22,18 +22,18 @@ import {
     Typography
 } from "@mui/material";
 
-import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
-import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
-import {DatePicker} from '@mui/x-date-pickers/DatePicker';
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
+import {DatePicker} from "@mui/x-date-pickers/DatePicker";
 import {useAuth0} from "@auth0/auth0-react";
 import {BsFacebook, BsInstagram, BsLinkedin, BsTwitter, BsYoutube} from "react-icons/bs";
 import {postGroup} from "../../backendConnection/postGroup";
 import {isValidEmail} from "../../validations/isValidEmail";
 import {isValidPhoneNumber} from "../../validations/isValidPhoneNumber";
 
-const options = ['Académico', 'Deportivo', 'Ocio', 'Otro',];
+const options = ["Académico", "Deportivo", "Ocio", "Otro",];
 
-const topicOptions = ['Ingeniería'];
+const topicOptions = ["Ingeniería"];
 
 interface GroupElement {
     username: string;
@@ -118,7 +118,7 @@ function GroupForm() {
     }
 
     const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
-        if (reason === 'clickaway') {
+        if (reason === "clickaway") {
             return;
         }
         setOpenNotification(false);
@@ -206,20 +206,20 @@ function GroupForm() {
             <>
                 <Box
                     style={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)'
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)"
                     }}
                 >
                     <CircularProgress size={70}
-                                      sx={{color: '#0c4c8a'}}/>
+                                      sx={{color: "#0c4c8a"}}/>
                 </Box>
             </>
         )
     }
 
-    return (<Box maxWidth="xl" style={{position: 'relative'}}>
+    return (<Box maxWidth="xl" style={{position: "relative"}}>
 
         <Grid container spacing={2}>
             <Grid item xs={4}>
@@ -227,7 +227,7 @@ function GroupForm() {
             </Grid>
             <Grid item xs={4}>
                 <FormControlLabel sx={{mt: 2}} control={<Checkbox checked={groupElement.group.info.isRecognized}
-                                                                  style={{color: '#2d2a26'}}
+                                                                  style={{color: "#2d2a26"}}
                                                                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                                                                       handleChangeInfo("isRecognized", event.target.checked);
                                                                   }}/>}
@@ -558,8 +558,8 @@ function GroupForm() {
         </Button>
 
         <Snackbar open={openNotification} autoHideDuration={6000} onClose={handleClose}>
-            <Alert onClose={handleClose} severity={notificationSeverity} sx={{width: '100%'}}>
-                <div style={{whiteSpace: 'pre-line'}}>{notificationMessage}</div>
+            <Alert onClose={handleClose} severity={notificationSeverity} sx={{width: "100%"}}>
+                <div style={{whiteSpace: "pre-line"}}>{notificationMessage}</div>
             </Alert>
         </Snackbar>
         <br/>
@@ -608,19 +608,18 @@ function GroupForm() {
 
             await postGroup(groupElement, getAccessTokenSilently);
         } else {
-            throw new Error(errorArray.join('\n'));
+            throw new Error(errorArray.join("\n"));
         }
     }
 
     function handleSuccess() {
         setIsPosting(false);
         setGroupElement({...newGroupElement});
-
+        notify("Grupo creado exitosamente", "success");
     }
 
     function handleSubmitError(e: any) {
         setIsPosting(false);
-        console.log(e?.message);
         if(e?.response?.data?.message === undefined){
             notify(e?.message, "error");
         } else {

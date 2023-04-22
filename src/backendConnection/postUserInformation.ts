@@ -5,7 +5,7 @@ export async function postUserInformation(getAccessTokenSilently: any) {
     const instance = axios.create({
         baseURL: "http://localhost:3002",
         headers: {
-            'Authorization': 'Bearer ' + token
+            "Authorization": "Bearer " + token
         }
     });
     await instance.post("/users/createUser")

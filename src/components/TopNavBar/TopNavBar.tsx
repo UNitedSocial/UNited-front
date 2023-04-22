@@ -20,21 +20,18 @@ import {
 } from "@mui/material";
 import React, {useEffect, useState} from "react";
 import {useAuth0} from "@auth0/auth0-react";
-import UNited_logo from '../../assets/united_logo_no_bg_white.png';
+import UNited_logo from "../../assets/united_logo_no_bg_white.png";
 import {BiFilterAlt, BiSearch, BiSortAlt2} from "react-icons/bi";
-import {useLocation, useNavigate} from 'react-router-dom'
-import axios from "axios";
-import { postUserInformation } from "../../backendConnection/postUserInformation";
+import {useLocation, useNavigate} from "react-router-dom"
+import {postUserInformation} from "../../backendConnection/postUserInformation";
 
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
-const pages = ['Contact Us'];
+const settings = ["Perfil", "Cuenta", "Panel de estadísticas", "Cerrar sesión"];
+const pages = ["Contáctanos"];
 
 function TopNavBar() {
 
 
     const [nav, setNav] = useState(false);
-
-
 
 
     const openNav = () => {
@@ -44,22 +41,21 @@ function TopNavBar() {
     const [openToast, setOpenToast] = useState(false);
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
     const [selectedOption, setSelectedOption] = useState("");
-    const [value, setValue] = useState('');
+    const [value, setValue] = useState("");
 
     const {loginWithRedirect} = useAuth0();
     const {logout} = useAuth0();
-    const {user, isAuthenticated, getAccessTokenSilently, isLoading} = useAuth0();
+    const {user, isAuthenticated, getAccessTokenSilently} = useAuth0();
 
     const navigate = useNavigate();
-    const location = useLocation();
 
 
     useEffect(() => {
         if (selectedOption !== "") {
-            if (selectedOption === "Profile") {
+            if (selectedOption === "Perfil") {
                 navigate("/profile");
             }
-            if (selectedOption === "Logout") {
+            if (selectedOption === "Cerrar sesión") {
                 logout();
             }
         }
@@ -67,17 +63,14 @@ function TopNavBar() {
     }, [selectedOption]);
 
     useEffect(() => {
-        if(isAuthenticated){
+        if (isAuthenticated) {
             postUserInformation(getAccessTokenSilently);
         }
     }, [isAuthenticated]);
 
-    async function callProtectedAPI() {
-    }
+    useEffect(() => {
 
-    /*useEffect(() => {
-        console.log(user)
-    }, [user]);*/
+    }, [user]);
 
 
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -115,11 +108,12 @@ function TopNavBar() {
         <AppBar position="fixed" sx={{backgroundColor: "#0c4c8a"}}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                    <ButtonBase onClick={() => navigate("/")}
+
+                    <IconButton onClick={() => navigate("/")}
                                 sx={{
                                     width: "9%",
                                     maxWidth: {xs: "100%", md: "80vw"},
-                                    maxHeight: {xs: "50vh", md: "60vh"}
+                                    maxHeight: {xs: "45vh", md: "55vh"}
                                 }}>
                         <Box
                             component="img"
@@ -130,10 +124,11 @@ function TopNavBar() {
                             alt="Logo"
                             src={UNited_logo}
                         />
-                    </ButtonBase>
+                    </IconButton>
 
-                    <Box sx={{flexGrow: 1, display: 'flex', justifyContent: 'center'}}>
-                        <Box component="form" onSubmit={handleSearchClick} noValidate sx={{flexGrow: 2, display: 'contents'}}>
+                    <Box sx={{flexGrow: 1, display: "flex", justifyContent: "center"}}>
+                        <Box component="form" onSubmit={handleSearchClick} noValidate
+                             sx={{flexGrow: 2, display: "contents"}}>
                             <Paper sx={{
                                 height: "auto",
                                 width: "35%",
@@ -151,7 +146,7 @@ function TopNavBar() {
                                             variant="outlined"
                                             size="small"
                                             InputProps={{
-                                                type: 'search'
+                                                type: "search"
                                             }}
                                             fullWidth={true}
                                             value={value}
@@ -177,11 +172,11 @@ function TopNavBar() {
 
                     </Box>
 
-                    <Box sx={{flexGrow: 0.03, display: {xs: 'none', md: 'flex'}}}>
+                    <Box sx={{flexGrow: 0.03, display: {xs: "none", md: "flex"}}}>
                         <Button
                             key={pages[0]}
                             onClick={() => navigate("/contact-us")}
-                            sx={{my: 2, color: 'white', display: 'block'}}
+                            sx={{my: 2, color: "white", display: "block"}}
                         >
                             {pages[0]}
                         </Button>
@@ -190,29 +185,29 @@ function TopNavBar() {
                     </Box>
 
                     <Box sx={{flexGrow: 0}}>
-                        <Tooltip title={isAuthenticated ? "Open settings" : "Login"}>
+                        <Tooltip title={isAuthenticated ? "Opciones" : "Iniciar sesión"}>
                             <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
                                 <Avatar src={user?.picture}/>
                             </IconButton>
                         </Tooltip>
                         <Menu
-                            sx={{mt: '45px'}}
+                            sx={{mt: "45px"}}
                             id="menu-appbar"
                             anchorEl={anchorElUser}
                             anchorOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
+                                vertical: "top",
+                                horizontal: "right",
                             }}
                             keepMounted
                             transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
+                                vertical: "top",
+                                horizontal: "right",
                             }}
                             open={isAuthenticated ? Boolean(anchorElUser) : false}
                             onClose={handleCloseUserMenu}
                         >
-                            {settings.map((setting) => (
-                                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                            {settings.map((setting, idx) => (
+                                <MenuItem key={idx} onClick={handleCloseUserMenu}>
                                     <Typography textAlign="center">{setting}</Typography>
                                 </MenuItem>
                             ))}
@@ -221,7 +216,7 @@ function TopNavBar() {
                 </Toolbar>
             </Container>
             <Snackbar open={openToast} autoHideDuration={6000} onClose={() => setOpenToast(false)}>
-                <Alert onClose={() => setOpenToast(false)} severity="success" sx={{width: '100%'}}>
+                <Alert onClose={() => setOpenToast(false)} severity="success" sx={{width: "100%"}}>
                     This is a success message!
                 </Alert>
             </Snackbar>

@@ -11,6 +11,8 @@ import Group from "../components/groupPage/Group";
 import RightBar from "../components/groupPage/rightBar/RightBar";
 import {BiCalendar, BiVideo} from "react-icons/bi";
 import ContactForm from "../components/contactForm/ContactForm";
+import GroupRequests from "../components/groupPage/groupRequests/GroupRequests";
+import RequestsBar from "../components/groupPage/requestsBar/RequestsBar";
 
 
 function Home() {
@@ -30,6 +32,7 @@ function Home() {
                                 <Route path="/new/group" element={<></>}/>
                                 <Route path="/group/:groupname" element={<Stack spacing={4}><Leftbar/> <RightBar/></Stack>}/>
                                 <Route path="/profile" element={<></>}/>
+                                <Route path="/contact-us" element={<></>}/>
                             </Routes>
                         </Grid>
                     </Grid>
@@ -46,7 +49,16 @@ function Home() {
 
                     <Grid item xs={3}>
                         <Grid container justifyContent="center">
-                            <UtilityMenu/>
+                            <Stack spacing={4}>
+                                <UtilityMenu/>
+                                <Routes>
+                                    <Route path="/" element={<></>}/>
+                                    <Route path="/new/group" element={<></>}/>
+                                    <Route path="/group/:groupname" element={<Stack ><RequestsBar/></Stack>}/>
+                                    <Route path="/profile" element={<></>}/>
+                                    <Route path="/contact-us" element={<></>}/>
+                                </Routes>
+                            </Stack>
                         </Grid>
                     </Grid>
 
