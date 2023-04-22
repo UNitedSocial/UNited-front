@@ -100,8 +100,8 @@ function TopNavBar() {
         handleSearch(value);
     }
 
-    const handleSearch = (search: String) => {
-        console.log("Searched: " + search);
+    async function handleSearch(search: string) {
+        console.log(await searchGroup(search))
     }
 
     return (
