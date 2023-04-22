@@ -25,6 +25,7 @@ import {BiFilterAlt, BiSearch, BiSortAlt2} from "react-icons/bi";
 import {useLocation, useNavigate} from 'react-router-dom'
 import axios from "axios";
 import { postUserInformation } from "../../backendConnection/postUserInformation";
+import { searchGroup } from "../../backendConnection/searchGroup";
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 const pages = ['Contact Us'];
@@ -111,9 +112,11 @@ function TopNavBar() {
         handleSearch(value);
     }
 
-    const handleSearch = (search: String) => {
-        console.log("Searched: " + search);
+    async function handleSearch(search: string) {
+        console.log(await searchGroup(search))
     }
+
+    
 
     return (
         <AppBar position="fixed" sx={{backgroundColor: "#0c4c8a"}}>
