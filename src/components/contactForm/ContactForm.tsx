@@ -97,7 +97,7 @@ function ContactForm() {
                             <TextField
                                 type="text"
                                 fullWidth={true}
-                                label="Nombre del grupo"
+                                label="Nombre"
                                 variant="outlined"
                                 error={formElement.contactForm.name === ""}
                                 helperText={formElement.contactForm.name ==="" ? "El nombre es requerido" : ""} 
@@ -109,7 +109,7 @@ function ContactForm() {
                             <TextField
                                 type="text"
                                 fullWidth={true}
-                                label="Nombre del grupo"
+                                label="Correo electrónico"
                                 variant="outlined"
                                 error={formElement.contactForm.email === ""}
                                 helperText={formElement.contactForm.email ==="" ? "El correo es requerido" : ""} 

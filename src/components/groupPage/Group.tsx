@@ -1,17 +1,20 @@
 import "./group.css"
-import {useParams} from "react-router-dom";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
 import {Alert, AlertTitle, Box, CircularProgress, Grid, Paper, Stack, Typography} from "@mui/material";
 import React, {useEffect, useState} from "react";
-import {MdGroupAdd} from "react-icons/md";
+import {MdGroupAdd, MdGroupRemove} from "react-icons/md";
 import {getGroup} from "../../backendConnection/getGroup";
 import VerifiedButton from "../userPage/Verified/VerifiedButton";
 import {postUserGroupRequest} from "../../backendConnection/postUserGroupRequest";
 import {useAuth0} from "@auth0/auth0-react";
 import {getUserStateGroup} from "../../backendConnection/getUserStateGroup";
+import {RxClock} from "react-icons/rx";
 
 
 function Group() {
 
+    const location = useLocation();
+    const navigate = useNavigate();
     let {groupname} = useParams();
 
     const {getAccessTokenSilently, user} = useAuth0();
@@ -19,13 +22,22 @@ function Group() {
     const [isLoading, setIsLoading] = useState(true);
     const [hasErrorLoading, sethasErrorLoading] = useState<JSON | null>(null);
     const [group, setGroup] = useState<any>(null);
+    const [userState, setUserState] = useState<any>(null);
 
     useEffect(() => {
         getGroup(groupname).then(data => loadedGroup(data)).catch(error => errorLoading(error));
         if(user !== undefined){
-            getUserStateGroup(groupname, user?.nickname).then()
+            getUserStateGroup(groupname, user?.nickname).then(r => {
+                if(r.state !== userState){
+                    const queryParams = new URLSearchParams(location.search);
+                    queryParams.set('state', r.state);
+                    setUserState(r.state);
+                    console.log(r.state);
+                    navigate({ search: queryParams.toString() });
+                }
+            }).catch(e => console.log(e))
         }
-    }, [groupname, user]);
+    }, [groupname, user, location]);
 
     const loadedGroup = (data: any) => {
         try {
@@ -163,14 +175,30 @@ function Group() {
                                 pt: 0
                             }}
                         >
-                            <button onClick={() => postUserGroupRequest(groupname, getAccessTokenSilently)} style={{
+                            <button onClick={() => postUserGroupRequest(groupname, getAccessTokenSilently, userState).then(() => {
+                                const queryParams = new URLSearchParams(location.search);
+                                queryParams.set("state", "");
+                                navigate({ search: queryParams.toString() });
+                                setUserState("");
+                            })} style={{
                                 border: "none",
                                 background: "none",
                                 padding: "0",
                                 font: "inherit",
                                 cursor: "pointer"
                             }}>
-                                <MdGroupAdd color={"black"} size={30}/>
+                                {(() => {
+                                    switch (userState) {
+                                        case "notBelongs":
+                                            return <MdGroupAdd color={"black"} size={30}/>;
+                                        case "pending":
+                                            return <RxClock color={"black"} size={30}/>;
+                                        case "belongs":
+                                            return <MdGroupRemove color={"black"} size={30}/>;
+                                        default:
+                                            return <></>;
+                                    }
+                                })()}
                             </button>
                         </Box>
                     </Grid>

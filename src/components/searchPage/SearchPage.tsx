@@ -1,22 +1,28 @@
 import {useEffect, useState} from "react";
 import GroupCard from "../groupCard/GroupCard";
 import {searchGroup} from "../../backendConnection/searchGroup";
-import {Alert, AlertTitle, Box, CircularProgress, Stack} from "@mui/material";
+import {Alert, AlertTitle, Box, CircularProgress, Stack, Typography} from "@mui/material";
+import {useParams} from "react-router-dom";
 
-export default function SearchPage({SearchText}: any) {
+export default function SearchPage() {
+
+    let {query} = useParams();
 
     const [isLoading, setIsLoading] = useState(true);
     const [hasErrorLoading, sethasErrorLoading] = useState<JSON | null>(null);
     const [Querygroup, setQuerygroup] = useState<any[]>([]);
 
     useEffect(() => {
-        searchGroup(SearchText).then(data => searchedGroups(data)).catch(error => errorLoading(error));
-    }, []);
+        setIsLoading(true)
+        searchGroup(query).then(data => searchedGroups(data)).catch(error => errorLoading(error));
+    }, [query]);
 
     const searchedGroups = (data: Array<any>) => {
         try {
             setQuerygroup(data);
             setIsLoading(false);
+            sethasErrorLoading(null);
+            console.log("data")
         } catch {
             errorLoading(JSON.parse('{}'));
         }
@@ -70,6 +76,10 @@ export default function SearchPage({SearchText}: any) {
     return (
         <>
             <Box maxWidth="xl" style={{position: 'relative'}}>
+
+                <Typography sx={{mb: 2}}>
+                    Search results for: {query}
+                </Typography>
 
                 <Stack
                     direction="column"

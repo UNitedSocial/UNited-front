@@ -37,9 +37,6 @@ function GroupCard(groupElement: Group) {
                     {info.description}
                 </Typography>
             </CardContent>
-            <CardActions>
-                <Button size="small">Unete</Button>
-            </CardActions>
         </Card>);
 
 }

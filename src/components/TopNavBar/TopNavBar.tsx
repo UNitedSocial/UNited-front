@@ -24,6 +24,7 @@ import UNited_logo from "../../assets/united_logo_no_bg_white.png";
 import {BiFilterAlt, BiSearch, BiSortAlt2} from "react-icons/bi";
 import {useLocation, useNavigate} from "react-router-dom"
 import {postUserInformation} from "../../backendConnection/postUserInformation";
+import {searchGroup} from "../../backendConnection/searchGroup";
 
 const settings = ["Perfil", "Cuenta", "Panel de estadísticas", "Cerrar sesión"];
 const pages = ["Contáctanos"];
@@ -100,8 +101,8 @@ function TopNavBar() {
         handleSearch(value);
     }
 
-    async function handleSearch(search: string) {
-        console.log(await searchGroup(search))
+    function handleSearch(search: string) {
+        navigate("/search/" + search)
     }
 
     return (

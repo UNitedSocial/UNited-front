@@ -1,4 +1,4 @@
-import {useParams} from "react-router-dom";
+import {useLocation, useParams} from "react-router-dom";
 import * as React from "react";
 import {useEffect, useState} from "react";
 import {Card, CardContent, Stack, Typography} from "@mui/material";
@@ -9,6 +9,8 @@ export default function RequestsBar() {
 
     let {groupname} = useParams();
 
+    let location = useLocation();
+
 
     const [isLoading, setIsLoading] = useState(true);
     const [hasErrorLoading, sethasErrorLoading] = useState<JSON | null>(null);
@@ -16,7 +18,7 @@ export default function RequestsBar() {
 
     useEffect(() => {
         getGroupRequests(groupname).then(data => loadedGroupRequests(data)).catch(error => errorLoading(error));
-    }, [groupname]);
+    }, [groupname, location]);
 
     const loadedGroupRequests = (data: any) => {
         try {

@@ -33,6 +33,8 @@ import {isValidPhoneNumber} from "../../validations/isValidPhoneNumber";
 
 const options = ["Académico", "Deportivo", "Ocio", "Otro",];
 
+const clasifications = ["Semillero", "Grupo estudiantil", "Proyecto estudiantil"];
+
 const topicOptions = ["Ingeniería"];
 
 interface GroupElement {
@@ -285,16 +287,20 @@ function GroupForm() {
         {groupElement.group.info.isRecognized ?
             <Grid container spacing={2} sx={{mt: 2}}>
                 <Grid item xs={3}>
-                    <TextField
-                        type="text"
-                        fullWidth={true}
-                        label="Tipo de grupo"
-                        variant="outlined"
-                        value={groupElement.group.info.recognizedInfo?.type}
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                            handleChangeRecognizedInfo("type", event.target.value);
-                        }}
-                    />
+                    <FormControl fullWidth>
+                        <InputLabel id="clasificacion-label">Clasificación</InputLabel>
+                        <Select
+                            labelId="clasificacion-label"
+                            id="clasificacion"
+                            label="Clasificación"
+                            value={groupElement.group.info.recognizedInfo?.type}
+                            onChange={(newValue) => handleChangeRecognizedInfo("type", newValue.target.value)}
+                        >
+                            {clasifications.map((clasificationElement, idx) => (
+                                <MenuItem key={idx} value={clasifications[idx]}>{clasifications[idx]}</MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
                 </Grid>
                 <Grid item xs={3}>
                     <TextField

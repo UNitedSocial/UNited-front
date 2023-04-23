@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export async function postUserGroupRequest(groupname: string | undefined, getAccessTokenSilently: any) {
+export async function postUserGroupRequest(groupname: string | undefined, getAccessTokenSilently: any, userState: string | undefined) {
 
     const token = await getAccessTokenSilently();
     const instance = axios.create({
@@ -9,9 +9,16 @@ export async function postUserGroupRequest(groupname: string | undefined, getAcc
             "Authorization": "Bearer " + token
         }
     });
-    const groupNameDTO = {
-        "groupName": groupname
-    }
 
-    await instance.post("/groups/seeGroup/" + groupname + "/sendRequest", groupNameDTO)
+    if (userState === "notBelongs") {
+        const groupNameDTO = {
+            "groupName": groupname
+        }
+
+        await instance.post("/groups/seeGroup/" + groupname + "/sendRequest", groupNameDTO)
+    } else if (userState === "pending") {
+
+    } else if (userState === "belongs") {
+
+    }
 }
