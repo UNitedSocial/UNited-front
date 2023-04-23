@@ -6,11 +6,41 @@ import { loadPosts } from "../../backendConnection/loadPosts";
 
 export default function Feed(props: any) {
 
-    const topics = ['arduino','ingeniería']; 
-
     const [isLoading, setIsLoading] = useState(true);
     const [hasErrorLoading, sethasErrorLoading] = useState<JSON | null>(null);
     const [posts, setPosts] = useState<any[]>([]);
+
+    const allFilters = ['all', 'todos', 'restablecer']
+    const topics = ['arduino','ingeniería', "matematicas"];
+    const dateFilters = ["recientes - antiguos", "antiguos - recientes"]
+    const nameFilters = ["A - Z", "Z - A"]
+
+    function compareName(a:any, b:any) {
+        //console.log(a.info.name.toLowerCase());
+        if (a.info.name.toLowerCase() < b.info.name.toLowerCase()) {
+          return -1;
+        }
+        if (a.info.name.toLowerCase() > b.info.name.toLowerCase()) {
+          return 1;
+        }
+        // a debe ser igual b
+        return 0;
+      }
+
+      function compareDate(a:any, b:any) {
+        var d1 = new Date(a.info.creationDate).getTime();
+        var d2 = new Date(b.info.creationDate).getTime();
+        //var d3 = new Date(b.info.fundationDate).getTime();
+        //console.log(d1 > d3 )
+        if (d1 < d2) {
+          return -1;
+        }
+        if (d1 > d2) {
+          return 1;
+        }
+        // a debe ser igual b
+        return 0;
+      }
 
     useEffect(() => {
         loadPosts().then(data => loadedPosts(data)).catch(error => errorLoading(error));
@@ -84,7 +114,7 @@ export default function Feed(props: any) {
 
                     {posts.map((postElement, idx) => {
 
-                        console.log(postElement.info.topics[0])
+                        
                         if (postElement.info.topics[0].includes(props.filterValueSelected)) {
                             return <GroupCard key={idx} info={postElement.info} />
                         }
@@ -96,7 +126,7 @@ export default function Feed(props: any) {
     }
 
 
-    else if (props.filterValueSelected === 'all') {return (
+    else if (allFilters.includes(props.filterValueSelected)) {return (
         <>
             <Box maxWidth="xl" style={{ position: 'relative' }}>
 
@@ -108,6 +138,58 @@ export default function Feed(props: any) {
  
 
                     {posts.map((postElement, idx) => (
+
+                        <GroupCard key={idx} info={postElement.info}/>
+                    ))}
+
+                </Stack>
+
+            </Box>
+        </>
+    )}
+
+    else if (dateFilters.includes(props.filterValueSelected)) {
+        var postsCopy = posts;
+        postsCopy.sort(compareDate);
+         return (
+        <>
+            <Box maxWidth="xl" style={{ position: 'relative' }}>
+
+                <Stack
+                    direction="column"
+                    justifyContent="center"
+                    alignItems="center"
+                    spacing={5}>
+ 
+
+                    {
+                    postsCopy.map((postElement, idx) => (
+
+                        <GroupCard key={idx} info={postElement.info}/>
+                    ))}
+
+                </Stack>
+
+            </Box>
+        </>
+    )}
+
+    else if (nameFilters.includes(props.filterValueSelected)) {
+        var postsCopy = posts;
+        postsCopy.sort(compareName);
+         return (
+        <>
+            <Box maxWidth="xl" style={{ position: 'relative' }}>
+
+                <Stack
+                    direction="column"
+                    justifyContent="center"
+                    alignItems="center"
+                    spacing={5}>
+ 
+
+                    {
+                    postsCopy.map((postElement, idx) => (
 
                         <GroupCard key={idx} info={postElement.info}/>
                     ))}

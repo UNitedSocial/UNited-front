@@ -17,11 +17,12 @@ import ContactForm from "../components/contactForm/ContactForm";
 function Home() {
     let[filterTextValue,updateFilterText] =React.useState<any>('all');
 
+
     function onFilterValueSelected(filterValue:any){
   
         updateFilterText(filterValue);
-        console.log(filterTextValue);
         updateFilterText(filterValue);
+        //console.log(filterTextValue);
 
     }
 
