@@ -1,7 +1,7 @@
 import "./leftbar.css"
 import GroupMember from "../groupMember/GroupMember"
 import {Card, CardContent, Stack, Typography} from "@mui/material";
-import {useParams} from "react-router-dom";
+import {useLocation, useParams} from "react-router-dom";
 import * as React from "react";
 import {useEffect, useState} from "react";
 import {getGroupMembers} from "../../../backendConnection/getGroupMembers";
@@ -9,6 +9,7 @@ import {getGroupMembers} from "../../../backendConnection/getGroupMembers";
 export default function LeftBar() {
 
     let {groupname} = useParams();
+    const location = useLocation();
 
 
     const [isLoading, setIsLoading] = useState(true);
@@ -17,11 +18,11 @@ export default function LeftBar() {
 
     useEffect(() => {
         getGroupMembers(groupname).then(data => loadedGroupMembers(data)).catch(error => errorLoading(error));
-    }, [groupname]);
+    }, [groupname, location]);
 
     const loadedGroupMembers = (data: any) => {
         try {
-            if(data.length === 0) throw new Error("No hay miembros en el grupo");
+            if (data.length === 0) throw new Error("No hay miembros en el grupo");
             setGroupMembers(data);
             setIsLoading(false);
         } catch {

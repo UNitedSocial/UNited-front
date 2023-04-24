@@ -5,7 +5,6 @@ import {
     Avatar,
     Box,
     Button,
-    ButtonBase,
     Container,
     Grid,
     IconButton,
@@ -22,9 +21,8 @@ import React, {useEffect, useState} from "react";
 import {useAuth0} from "@auth0/auth0-react";
 import UNited_logo from "../../assets/united_logo_no_bg_white.png";
 import {BiFilterAlt, BiSearch, BiSortAlt2} from "react-icons/bi";
-import {useLocation, useNavigate} from "react-router-dom"
+import {useNavigate} from "react-router-dom"
 import {postUserInformation} from "../../backendConnection/postUserInformation";
-import {searchGroup} from "../../backendConnection/searchGroup";
 
 const settings = ["Perfil", "Cuenta", "Panel de estadísticas", "Cerrar sesión"];
 const pages = ["Contáctanos"];
@@ -192,7 +190,7 @@ function TopNavBar() {
                             </IconButton>
                         </Tooltip>
                         <Menu
-                            sx={{mt: "45px"}}
+                            sx={{mt: "2.813em"}}
                             id="menu-appbar"
                             anchorEl={anchorElUser}
                             anchorOrigin={{

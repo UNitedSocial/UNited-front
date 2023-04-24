@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export async function getGroup(groupname: string | undefined) {
-    if(groupname === undefined){
+    if (groupname === undefined) {
         throw new Error("Groupname is undefined");
     }
 

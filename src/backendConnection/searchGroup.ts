@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export async function searchGroup(searchText: string | undefined) {
-    if(searchText === undefined){
+    if (searchText === undefined) {
         throw new Error("Search is undefined");
     }
 

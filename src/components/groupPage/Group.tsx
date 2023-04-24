@@ -26,14 +26,13 @@ function Group() {
 
     useEffect(() => {
         getGroup(groupname).then(data => loadedGroup(data)).catch(error => errorLoading(error));
-        if(user !== undefined){
+        if (user !== undefined) {
             getUserStateGroup(groupname, user?.nickname).then(r => {
-                if(r.state !== userState){
+                if (r.state !== userState) {
                     const queryParams = new URLSearchParams(location.search);
                     queryParams.set('state', r.state);
                     setUserState(r.state);
-                    console.log(r.state);
-                    navigate({ search: queryParams.toString() });
+                    navigate({search: queryParams.toString()});
                 }
             }).catch(e => console.log(e))
         }
@@ -175,12 +174,13 @@ function Group() {
                                 pt: 0
                             }}
                         >
-                            <button onClick={() => postUserGroupRequest(groupname, getAccessTokenSilently, userState).then(() => {
-                                const queryParams = new URLSearchParams(location.search);
-                                queryParams.set("state", "");
-                                navigate({ search: queryParams.toString() });
-                                setUserState("");
-                            })} style={{
+                            <button
+                                onClick={() => postUserGroupRequest(groupname, getAccessTokenSilently, userState).then(() => {
+                                    const queryParams = new URLSearchParams(location.search);
+                                    queryParams.set("state", "");
+                                    navigate({search: queryParams.toString()});
+                                    setUserState("");
+                                })} style={{
                                 border: "none",
                                 background: "none",
                                 padding: "0",

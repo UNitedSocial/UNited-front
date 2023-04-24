@@ -9,7 +9,7 @@ export default function RequestsBar() {
 
     let {groupname} = useParams();
 
-    let location = useLocation();
+    const location = useLocation();
 
 
     const [isLoading, setIsLoading] = useState(true);

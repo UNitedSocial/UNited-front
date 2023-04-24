@@ -1,4 +1,4 @@
-import {Alert, Box, Button, CircularProgress, Grid, Link, Snackbar, Stack, TextField} from "@mui/material";
+import {Alert, Box, Button, CircularProgress, Grid, Snackbar, Stack, TextField} from "@mui/material";
 import * as React from "react";
 import {useState} from "react";
 import {useAuth0} from "@auth0/auth0-react";
@@ -70,7 +70,8 @@ function ContactForm() {
                                 color: "#706f7b",
                                 lineHeight: "1.6",
                             }}>
-                                Estaremos encantados de responder cualquier pregunta que puedas tener. Tan pronto como recibamos tu mensaje, te responderemos lo antes posible.
+                                Estaremos encantados de responder cualquier pregunta que puedas tener. Tan pronto como
+                                recibamos tu mensaje, te responderemos lo antes posible.
                             </p>
                             <a href="https://wa.me/+573004567869" target="_blank" style={{
                                 textDecoration: "none",
@@ -93,14 +94,14 @@ function ContactForm() {
                         </Stack>
                     </Grid>
                     <Grid item xs={6}>
-                        <Stack spacing={2}  sx={{mt: 4}}>
+                        <Stack spacing={2} sx={{mt: 4}}>
                             <TextField
                                 type="text"
                                 fullWidth={true}
                                 label="Nombre"
                                 variant="outlined"
                                 error={formElement.contactForm.name === ""}
-                                helperText={formElement.contactForm.name ==="" ? "El nombre es requerido" : ""} 
+                                helperText={formElement.contactForm.name === "" ? "El nombre es requerido" : ""}
                                 value={formElement.contactForm.name}
                                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                                     handleChangeForm("name", event.target.value);
@@ -112,7 +113,7 @@ function ContactForm() {
                                 label="Correo electrónico"
                                 variant="outlined"
                                 error={formElement.contactForm.email === ""}
-                                helperText={formElement.contactForm.email ==="" ? "El correo es requerido" : ""} 
+                                helperText={formElement.contactForm.email === "" ? "El correo es requerido" : ""}
                                 value={formElement.contactForm.email}
                                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                                     handleChangeForm("email", event.target.value);
@@ -124,7 +125,7 @@ function ContactForm() {
                                 fullWidth={true}
                                 rows={4}
                                 error={formElement.contactForm.message === ""}
-                                helperText={formElement.contactForm.message ==="" ? "El mensaje es obligatorio" : ""} 
+                                helperText={formElement.contactForm.message === "" ? "El mensaje es obligatorio" : ""}
                                 value={formElement.contactForm.message}
                                 onChange={(newValue) => handleChangeForm("message", newValue.target.value)}
                             />

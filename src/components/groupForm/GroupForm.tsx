@@ -3,7 +3,8 @@ import {useState} from "react";
 
 import "./groupForm.css"
 import {
-    Alert, AlertColor,
+    Alert,
+    AlertColor,
     Autocomplete,
     Box,
     Button,
@@ -590,7 +591,7 @@ function GroupForm() {
         if (groupElement.group.info.contact.cellphone === "") {
             errorArray.push("El teléfono es obligatorio");
         } else {
-            if(!(isValidPhoneNumber(groupElement.group.info.contact.cellphone))){
+            if (!(isValidPhoneNumber(groupElement.group.info.contact.cellphone))) {
                 errorArray.push("El teléfono no es válido");
             }
         }
@@ -598,7 +599,7 @@ function GroupForm() {
         if (groupElement.group.info.contact.mail === "") {
             errorArray.push("El correo es obligatorio");
         } else {
-            if(!(isValidEmail(groupElement.group.info.contact.mail))){
+            if (!(isValidEmail(groupElement.group.info.contact.mail))) {
                 errorArray.push("El correo no es válido");
             }
         }
@@ -626,7 +627,7 @@ function GroupForm() {
 
     function handleSubmitError(e: any) {
         setIsPosting(false);
-        if(e?.response?.data?.message === undefined){
+        if (e?.response?.data?.message === undefined) {
             notify(e?.message, "error");
         } else {
             notify(e?.response?.data?.message, "error");

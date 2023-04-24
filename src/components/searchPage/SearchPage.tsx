@@ -22,7 +22,6 @@ export default function SearchPage() {
             setQuerygroup(data);
             setIsLoading(false);
             sethasErrorLoading(null);
-            console.log("data")
         } catch {
             errorLoading(JSON.parse('{}'));
         }
@@ -87,10 +86,10 @@ export default function SearchPage() {
                     alignItems="center"
                     spacing={5}>
                     {Querygroup.map((postElement, idx) => (
-                            <GroupCard
-                                key={idx}
-                                info={postElement.info}
-                            />
+                        <GroupCard
+                            key={idx}
+                            info={postElement.info}
+                        />
                     ))}
                 </Stack>
 

@@ -1,8 +1,8 @@
 import "./feed.css"
-import { useEffect, useState } from "react";
-import { Alert, AlertTitle, Box, CircularProgress, Stack } from "@mui/material";
+import {useEffect, useState} from "react";
+import {Alert, AlertTitle, Box, CircularProgress, Stack} from "@mui/material";
 import GroupCard from "../groupCard/GroupCard";
-import { loadPosts } from "../../backendConnection/loadPosts";
+import {loadPosts} from "../../backendConnection/loadPosts";
 
 export default function Feed(props: any) {
 
@@ -11,36 +11,33 @@ export default function Feed(props: any) {
     const [posts, setPosts] = useState<any[]>([]);
 
     const allFilters = ['all', 'todos', 'restablecer']
-    const topics = ['arduino','ingeniería', "matematicas"];
+    const topics = ['arduino', 'ingeniería', "matematicas"];
     const dateFilters = ["recientes - antiguos", "antiguos - recientes"]
     const nameFilters = ["A - Z", "Z - A"]
 
-    function compareName(a:any, b:any) {
-        //console.log(a.info.name.toLowerCase());
+    function compareName(a: any, b: any) {
         if (a.info.name.toLowerCase() < b.info.name.toLowerCase()) {
-          return -1;
+            return -1;
         }
         if (a.info.name.toLowerCase() > b.info.name.toLowerCase()) {
-          return 1;
+            return 1;
         }
         // a debe ser igual b
         return 0;
-      }
+    }
 
-      function compareDate(a:any, b:any) {
-        var d1 = new Date(a.info.creationDate).getTime();
-        var d2 = new Date(b.info.creationDate).getTime();
-        //var d3 = new Date(b.info.fundationDate).getTime();
-        //console.log(d1 > d3 )
+    function compareDate(a: any, b: any) {
+        const d1 = new Date(a.info.creationDate).getTime();
+        const d2 = new Date(b.info.creationDate).getTime();
         if (d1 < d2) {
-          return -1;
+            return -1;
         }
         if (d1 > d2) {
-          return 1;
+            return 1;
         }
         // a debe ser igual b
         return 0;
-      }
+    }
 
     useEffect(() => {
         loadPosts().then(data => loadedPosts(data)).catch(error => errorLoading(error));
@@ -101,108 +98,104 @@ export default function Feed(props: any) {
     }
 
 
-    if (topics.includes(props.filterValueSelected)) {return (
-        <>
-            <Box maxWidth="xl" style={{ position: 'relative' }}>
+    if (topics.includes(props.filterValueSelected)) {
+        return (
+            <>
+                <Box maxWidth="xl" style={{position: 'relative'}}>
 
-                <Stack
-                    direction="column"
-                    justifyContent="center"
-                    alignItems="center"
-                    spacing={5}>
-
-
-                    {posts.map((postElement, idx) => {
+                    <Stack
+                        direction="column"
+                        justifyContent="center"
+                        alignItems="center"
+                        spacing={5}>
 
 
-                        if (postElement.info.topics[0].includes(props.filterValueSelected)) {
-                            return <GroupCard key={idx} info={postElement.info} />
-                        }
-                    })}
-                </Stack>
-
-            </Box>
-        </>)
-    }
+                        {posts.map((postElement, idx) => {
 
 
-    else if (allFilters.includes(props.filterValueSelected)) {return (
-        <>
-            <Box maxWidth="xl" style={{ position: 'relative' }}>
+                            if (postElement.info.topics[0].includes(props.filterValueSelected)) {
+                                return <GroupCard key={idx} info={postElement.info}/>
+                            }
+                        })}
+                    </Stack>
 
-                <Stack
-                    direction="column"
-                    justifyContent="center"
-                    alignItems="center"
-                    spacing={5}>
+                </Box>
+            </>)
+    } else if (allFilters.includes(props.filterValueSelected)) {
+        return (
+            <>
+                <Box maxWidth="xl" style={{position: 'relative'}}>
+
+                    <Stack
+                        direction="column"
+                        justifyContent="center"
+                        alignItems="center"
+                        spacing={5}>
 
 
-                    {posts.map((postElement, idx) => (
+                        {posts.map((postElement, idx) => (
 
-                        <GroupCard key={idx} info={postElement.info}/>
-                    ))}
+                            <GroupCard key={idx} info={postElement.info}/>
+                        ))}
 
-                </Stack>
+                    </Stack>
 
-            </Box>
-        </>
-    )}
-
-    else if (dateFilters.includes(props.filterValueSelected)) {
+                </Box>
+            </>
+        )
+    } else if (dateFilters.includes(props.filterValueSelected)) {
         var postsCopy = posts;
         postsCopy.sort(compareDate);
-         return (
-        <>
-            <Box maxWidth="xl" style={{position: "relative"}}>
+        return (
+            <>
+                <Box maxWidth="xl" style={{position: "relative"}}>
 
-                <Stack
-                    direction="column"
-                    justifyContent="center"
-                    alignItems="center"
-                    spacing={5}>
+                    <Stack
+                        direction="column"
+                        justifyContent="center"
+                        alignItems="center"
+                        spacing={5}>
 
 
-                    {
-                    postsCopy.map((postElement, idx) => (
+                        {
+                            postsCopy.map((postElement, idx) => (
 
-                        <GroupCard key={idx} info={postElement.info}/>
-                    ))}
+                                <GroupCard key={idx} info={postElement.info}/>
+                            ))}
 
-                </Stack>
+                    </Stack>
 
-            </Box>
-        </>
-    )}
-
-    else if (nameFilters.includes(props.filterValueSelected)) {
+                </Box>
+            </>
+        )
+    } else if (nameFilters.includes(props.filterValueSelected)) {
         var postsCopy = posts;
         postsCopy.sort(compareName);
-         return (
-        <>
-            <Box maxWidth="xl" style={{ position: 'relative' }}>
+        return (
+            <>
+                <Box maxWidth="xl" style={{position: 'relative'}}>
 
-                <Stack
-                    direction="column"
-                    justifyContent="center"
-                    alignItems="center"
-                    spacing={5}>
+                    <Stack
+                        direction="column"
+                        justifyContent="center"
+                        alignItems="center"
+                        spacing={5}>
 
 
-                    {
-                    postsCopy.map((postElement, idx) => (
+                        {
+                            postsCopy.map((postElement, idx) => (
 
-                        <GroupCard key={idx} info={postElement.info}/>
-                    ))}
+                                <GroupCard key={idx} info={postElement.info}/>
+                            ))}
 
-                </Stack>
+                    </Stack>
 
-            </Box>
-        </>
-    )}
-
-    else{
-        return <></>}
-
+                </Box>
+            </>
+        )
+    } else {
+        return <></>
+    }
 
 
 }

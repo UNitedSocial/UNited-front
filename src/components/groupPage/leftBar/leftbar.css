@@ -1,13 +1,13 @@
 .sidebar {
     flex: 3;
-    height: calc(100vh - 50px);
+    height: calc(100vh - 3.125em);
     overflow-y: scroll;
     position: sticky;
-    top: 50px;
+    top: 3.125em;
 }
 
 ::-webkit-scrollbar {
-    width: 5px;
+    width: 0.313em;
 }
 
 ::-webkit-scrollbar-track {
@@ -19,7 +19,7 @@
 }
 
 .sidebarWrapper {
-    padding: 20px;
+    padding: 1.250em;
 }
 
 .sidebarList {
@@ -31,33 +31,33 @@
 .sidebarListItem {
     display: flex;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 1.250em;
 }
 
 .sidebarIcon {
-    margin-right: 15px;
+    margin-right: 0.938em;
 }
 
 .sidebarButton {
-    width: 300px;
+    width: 18.750em;
     border: none;
-    padding: 10px;
-    border-radius: 5px;
+    padding: 0.625em;
+    border-radius: 0.313em;
     font-weight: 500;
 }
 
 .sidebarHr {
-    margin: 20px 0;
+    margin: 1.250em 0;
 }
 
 .sidebarFriendList {
     padding: 0;
     margin: 0;
-    margin-top: 30px;
+    margin-top: 1.875em;
     list-style: none;
 }
 
-.sidebarItemText{
+.sidebarItemText {
     font-weight: bold;
 
 }

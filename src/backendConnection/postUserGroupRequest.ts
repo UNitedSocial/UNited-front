@@ -19,6 +19,10 @@ export async function postUserGroupRequest(groupname: string | undefined, getAcc
     } else if (userState === "pending") {
 
     } else if (userState === "belongs") {
+        const groupNameDTO = {
+            "name": groupname
+        }
 
+        await instance.put("/users/quitGroup", groupNameDTO)
     }
 }
