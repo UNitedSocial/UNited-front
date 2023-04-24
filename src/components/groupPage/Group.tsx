@@ -175,7 +175,7 @@ function Group() {
                             }}
                         >
                             <button
-                                onClick={() => postUserGroupRequest(groupname, getAccessTokenSilently, userState).then(() => {
+                                onClick={() => postUserGroupRequest(groupname, getAccessTokenSilently, userState, user?.nickname).then(() => {
                                     const queryParams = new URLSearchParams(location.search);
                                     queryParams.set("state", "");
                                     navigate({search: queryParams.toString()});

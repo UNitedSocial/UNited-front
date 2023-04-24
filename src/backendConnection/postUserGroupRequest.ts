@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export async function postUserGroupRequest(groupname: string | undefined, getAccessTokenSilently: any, userState: string | undefined) {
+export async function postUserGroupRequest(groupname: string | undefined, getAccessTokenSilently: any, userState: string | undefined, user: string | undefined) {
 
     const token = await getAccessTokenSilently();
     const instance = axios.create({
@@ -15,13 +15,16 @@ export async function postUserGroupRequest(groupname: string | undefined, getAcc
             "groupName": groupname
         }
 
-        await instance.post("/groups/seeGroup/" + groupname + "/sendRequest", groupNameDTO)
+        await instance.post("/groups/seeGroup/" + groupname + "/requests", groupNameDTO)
     } else if (userState === "pending") {
 
     } else if (userState === "belongs") {
         const groupNameDTO = {
-            "name": groupname
+            "name": groupname,
+            "user" : {"nickname": user}
         }
+
+        console.log(groupNameDTO)
 
         await instance.put("/users/quitGroup", groupNameDTO)
     }
