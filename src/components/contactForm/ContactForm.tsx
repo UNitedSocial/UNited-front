@@ -1,8 +1,9 @@
-import {Alert, Box, Button, CircularProgress, Grid, Snackbar, Stack, TextField} from "@mui/material";
+import {Box, Button, CircularProgress, Grid, Stack, TextField} from "@mui/material";
 import * as React from "react";
 import {useState} from "react";
 import {useAuth0} from "@auth0/auth0-react";
 import axios from "axios";
+import Notification from "../Notification/Notification";
 
 
 function ContactForm() {
@@ -16,8 +17,7 @@ function ContactForm() {
             message: ""
         }
     });
-    const [openNotification, setOpenNotification] = useState(false);
-    const [notificationMessage, setNotificationMessage] = useState("");
+    const [notificationDTO, setNotificationDTO] = useState<any>({open: false, message: "", severity: "info"})
 
     function handleChangeForm(page: string, value: string | null) {
         setFormElement({
@@ -26,14 +26,6 @@ function ContactForm() {
             }
         })
     }
-
-    const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
-        if (reason === "clickaway") {
-            return;
-        }
-
-        setOpenNotification(false);
-    };
 
     if (isPosting) {
         return (
@@ -130,18 +122,29 @@ function ContactForm() {
                                 onChange={(newValue) => handleChangeForm("message", newValue.target.value)}
                             />
                             <Button variant="contained" sx={{mt: 4}} color="primary"
-                                    onClick={() => handleSubmit().then(() => setIsPosting(false)).catch(e => handleSubmitError(e))}>
+                                    onClick={() => handleSubmit().then(() => {
+                                        setNotificationDTO({
+                                            open: true,
+                                            message: "Mensaje enviado con éxito",
+                                            severity: "success"
+                                        });
+                                        setFormElement({
+                                            contactForm: {
+                                                name: "",
+                                                email: "",
+                                                message: ""
+                                            }
+                                        });
+                                        setIsPosting(false);
+                                    }).catch(e => handleSubmitError(e))}>
                                 Enviar mensaje
                             </Button>
                         </Stack>
                     </Grid>
                 </Grid>
 
-                <Snackbar open={openNotification} autoHideDuration={6000} onClose={handleClose}>
-                    <Alert onClose={handleClose} severity="error" sx={{width: "100%"}}>
-                        {notificationMessage}
-                    </Alert>
-                </Snackbar>
+                <Notification notificationDTO={notificationDTO} setNotificationDTO={setNotificationDTO}/>
+
                 <br/>
             </Box>
         </>
@@ -158,10 +161,8 @@ function ContactForm() {
     }
 
     function handleSubmitError(e: any) {
-
         setIsPosting(false);
-        setNotificationMessage(e?.response?.data?.message);
-        setOpenNotification(true);
+        setNotificationDTO({open: true, message: "Error al enviar mensaje", severity: "error"});
     }
 }
 

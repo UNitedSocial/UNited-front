@@ -1,0 +1,42 @@
+.sidebarUtilityMenu ul {
+    list-style: none;
+    display: block;
+    padding: 0 2vh;
+}
+
+.sidebarUtilityTitle {
+    display: block;
+    padding: 0 2vh;
+}
+
+.sidebarUtilityMenu ul li {
+    position: relative;
+}
+
+.sidebarUtilityMenu ul li a {
+    text-decoration: none;
+    color: #000000;
+    display: block;
+    padding: 1vh 0;
+}
+
+.sidebarUtilityMenu ul li button {
+    border: none;
+    background: none;
+    display: block;
+    padding: 1vh 0;
+    font: inherit;
+    cursor: pointer;
+}
+
+.sidebarUtilityMenu ul li a svg {
+    vertical-align: middle;
+}
+
+.sidebarUtilityMenu ul li a span {
+    margin-left: 0.125em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    white-space: nowrap;
+}

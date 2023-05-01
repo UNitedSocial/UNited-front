@@ -21,8 +21,8 @@ import React, {useEffect, useState} from "react";
 import {useAuth0} from "@auth0/auth0-react";
 import UNited_logo from "../../assets/united_logo_no_bg_white.png";
 import {BiFilterAlt, BiSearch, BiSortAlt2} from "react-icons/bi";
-import {useNavigate} from "react-router-dom"
-import {postUserInformation} from "../../backendConnection/postUserInformation";
+import {useLocation, useNavigate} from "react-router-dom"
+import {postUserInformation} from "../../backendConnection/Users/postUserInformation";
 
 const settings = ["Perfil", "Cuenta", "Panel de estadísticas", "Cerrar sesión"];
 const pages = ["Contáctanos"];
@@ -47,6 +47,7 @@ function TopNavBar() {
     const {user, isAuthenticated, getAccessTokenSilently} = useAuth0();
 
     const navigate = useNavigate();
+    const location = useLocation();
 
 
     useEffect(() => {
@@ -63,13 +64,13 @@ function TopNavBar() {
 
     useEffect(() => {
         if (isAuthenticated) {
-            postUserInformation(getAccessTokenSilently);
+            postUserInformation(getAccessTokenSilently).then();
         }
     }, [isAuthenticated]);
 
     useEffect(() => {
-
-    }, [user]);
+        setValue("");
+    }, [location]);
 
 
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -161,12 +162,6 @@ function TopNavBar() {
                                     </Grid>
                                 </Grid>
                             </Paper>
-                            <IconButton type="button" aria-label="filer">
-                                <BiFilterAlt color="#fefefe"/>
-                            </IconButton>
-                            <IconButton type="button" aria-label="sort">
-                                <BiSortAlt2 color="#fefefe"/>
-                            </IconButton>
                         </Box>
 
                     </Box>
