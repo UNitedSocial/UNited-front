@@ -6,6 +6,7 @@ import Group from "../pages/Group/Group";
 import NewGroup from "./NewGroup/NewGroup";
 import ContactUs from "./Contact Us/ContactUs";
 import Profile from "./Profile/Profile";
+import EditGroup from "./EditGroup/EditGroup";
 
 
 function Home() {
@@ -23,6 +24,7 @@ function Home() {
                     <Route path="/search/:query" element={<Feed/>}/>
                     <Route path="/new/group" element={<NewGroup/>}/>
                     <Route path="/group/:groupname" element={<Group/>}/>
+                    <Route path="/edit/:groupname" element={<EditGroup/>}/>
                     <Route path="/profile" element={<Profile/>}/>
                     <Route path="/contact-us" element={<ContactUs/>}/>
                 </Routes>

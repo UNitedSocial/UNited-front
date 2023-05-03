@@ -15,13 +15,14 @@ import {getGroupMembers} from "../../backendConnection/Groups/getGroupMembers";
 import {getGroupSimilar} from "../../backendConnection/Groups/getGroupSimilar";
 import {getGroupRequests} from "../../backendConnection/Groups/getGroupRequests";
 import {getUserStateGroup} from "../../backendConnection/Users/getUserStateGroup";
+import EditCard from "../../components/Groups/groupPage/editCard/EditCard";
 
 
 function Group() {
 
     const {groupname} = useParams();
 
-    const {user} = useAuth0();
+    const {user, isLoading} = useAuth0();
 
     const [group, setGroup] = useState<any>(null);
     const [userState, setUserState] = useState<any>(null);
@@ -29,14 +30,14 @@ function Group() {
     const [groupSimilars, setGroupSimilars] = useState<any>(null);
     const [groupRequests, setGroupRequests] = useState<any>(null);
 
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoadingScreen, setIsLoadingScreen] = useState(true);
     const [hasErrorLoading, sethasErrorLoading] = useState<JSON | null>(null);
     const [isPosting, setIsPosting] = useState(false);
 
     useEffect(() => {
-        setIsLoading(true);
-        loadGroupInfo().then(() => setIsLoading(false)).catch(error => errorLoading(error));
-    }, [groupname, user]);
+        setIsLoadingScreen(true);
+        loadGroupInfo().then(() => setIsLoadingScreen(false)).catch(error => errorLoading(error));
+    }, [groupname, user, isLoadingScreen]);
 
     async function loadGroupInfo() {
         getGroup(groupname).then(data => loadedGroup(data));
@@ -88,10 +89,10 @@ function Group() {
 
     const errorLoading = (error: JSON) => {
         sethasErrorLoading(error);
-        setIsLoading(false);
+        setIsLoadingScreen(false);
     }
 
-    if (isLoading) {
+    if (isLoadingScreen) {
         return (
             <LoadingScreen/>
         )
@@ -122,6 +123,7 @@ function Group() {
                 <Grid container justifyContent="center">
                     <Stack spacing={4}>
                         <UtilityMenu/>
+                        <EditCard />
                         <RequestsCard groupRequests={groupRequests}/>
                     </Stack>
                 </Grid>

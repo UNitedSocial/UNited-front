@@ -6,10 +6,8 @@ export async function getUserStateGroup(groupname: string | undefined, username:
         throw new Error("Groupname or username is undefined");
     }
 
-    const response = await axios.get(`http://localhost:3002/users/userStateGroup?username=${username}&groupname=${groupname}`);
+    const response = await axios.get(`http://localhost:3002/groups/${groupname}/${username}`);
 
-    console.log(response.data);
-    console.log("getUserStateGroup");
 
     return await response.data;
 }

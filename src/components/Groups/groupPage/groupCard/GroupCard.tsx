@@ -78,7 +78,7 @@ function Group(props: any) {
                                 {group?.info?.name}
                                 {group?.info?.isRecognized ?
                                     <VerifiedButton/>
-                                    : <></>}
+                                    : null}
                             </Typography>
                             <Typography variant="subtitle1" color="black" paragraph>
                                 {group?.info?.description}
@@ -115,7 +115,7 @@ function Group(props: any) {
                                         case "belongs":
                                             return <MdGroupRemove color={"black"} size={30}/>;
                                         default:
-                                            return <></>;
+                                            return null;
                                     }
                                 })()}
                             </button>
