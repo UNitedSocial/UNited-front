@@ -15,5 +15,5 @@ export async function putGroupRequest(user: string | undefined, response: string
         "answer": response //aceptar o rechazar
     }
 
-    await instance.put("/groups/seeGroup/" + groupname + "/requests", groupRequestDTO)
+    await instance.put("/groups/" + groupname + "/requests", groupRequestDTO)
 }

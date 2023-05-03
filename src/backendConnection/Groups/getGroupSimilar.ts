@@ -5,7 +5,7 @@ export async function getGroupSimilar(groupname: string | undefined) {
         throw new Error("Groupname is undefined");
     }
 
-    const response = await axios.get("http://localhost:3002/groups/seeGroup/" + groupname + "/related?n=3&a=0");
+    const response = await axios.get("http://localhost:3002/groups/" + groupname + "/related?n=3&a=0");
 
     return await response.data;
 }

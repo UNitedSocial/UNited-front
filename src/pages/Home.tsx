@@ -2,7 +2,6 @@ import TopNavBar from "../components/TopNavBar/TopNavBar"
 import Feed from "../pages/Feed/Feed"
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import React from "react";
-import UserProfile from "../components/Users/userPage/UserProfile";
 import Group from "../pages/Group/Group";
 import NewGroup from "./NewGroup/NewGroup";
 import ContactUs from "./Contact Us/ContactUs";

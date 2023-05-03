@@ -14,6 +14,7 @@ import SimilarCard from "../../components/Groups/groupPage/similarCard/SimilarCa
 import {getGroupMembers} from "../../backendConnection/Groups/getGroupMembers";
 import {getGroupSimilar} from "../../backendConnection/Groups/getGroupSimilar";
 import {getGroupRequests} from "../../backendConnection/Groups/getGroupRequests";
+import {getUserStateGroup} from "../../backendConnection/Users/getUserStateGroup";
 
 
 function Group() {
@@ -39,7 +40,7 @@ function Group() {
 
     async function loadGroupInfo() {
         getGroup(groupname).then(data => loadedGroup(data));
-        //getUserStateGroup(groupname, user?.nickname).then(data => loadedUserState(data))
+        getUserStateGroup(groupname, user?.nickname).then(data => loadedUserState(data))
         getGroupMembers(groupname).then(data => loadedGroupMembers(data));
         getGroupSimilar(groupname).then(data => loadedGroupSimilar(data));
         getGroupRequests(groupname).then(data => loadedGroupRequests(data));

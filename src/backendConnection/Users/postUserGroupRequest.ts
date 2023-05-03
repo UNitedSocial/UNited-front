@@ -15,7 +15,7 @@ export async function postUserGroupRequest(groupname: string | undefined, getAcc
             "groupName": groupname
         }
 
-        await instance.post("/groups/seeGroup/" + groupname + "/requests", groupNameDTO)
+        await instance.post("/groups/" + groupname + "/requests", groupNameDTO)
     } else if (userState === "pending") {
 
     } else if (userState === "belongs") {

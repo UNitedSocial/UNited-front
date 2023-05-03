@@ -5,7 +5,7 @@ import * as React from "react";
 
 export default function MemberCard(props: any) {
 
-    const {groupMember} = props;
+    const {groupMembers} = props;
 
     return (
         <Card sx={{maxWidth: {xs: "60%", md: "100%"}}} style={{background: "#EFECEB"}} variant="outlined">
@@ -17,7 +17,7 @@ export default function MemberCard(props: any) {
                 </Typography>
 
                 <Stack>
-                    {groupMember?.map((u: any, idx: any) => (
+                    {groupMembers?.map((u: any, idx: any) => (
                         <GroupMember key={idx} user={u}/>
                     ))}
                 </Stack>

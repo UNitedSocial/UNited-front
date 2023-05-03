@@ -3,6 +3,8 @@ import * as React from "react";
 
 export default function FilterFeed(props: any) {
 
+    const {filters, setFilters} = props;
+
     return (
         <Card sx={{maxWidth: {xs: "60%", md: "100%"}}} style={{background: "#EFECEB"}} variant="outlined">
             <CardContent>

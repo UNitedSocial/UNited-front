@@ -16,6 +16,7 @@ export default function Feed(props: any) {
     const [hasErrorLoading, sethasErrorLoading] = useState<JSON | null>(null);
 
     const [posts, setPosts] = useState<any[]>([]);
+    const [filters, setFilters] = useState<any[]>([]);
 
     const location = useLocation();
     let {query} = useParams();
@@ -67,7 +68,7 @@ export default function Feed(props: any) {
         <Grid container>
             <Grid item xs={3}>
                 <Grid container justifyContent="center">
-                    <FilterFeed/>
+                    <FilterFeed filters={filters} setFilters={setFilters}/>
                 </Grid>
             </Grid>
 
@@ -82,26 +83,4 @@ export default function Feed(props: any) {
             </Grid>
         </Grid>
     )
-
-    // TODO: Delete this comment
-
-    /*
-    <Grid container>
-        <Grid item xs={3}>
-            <Grid container justifyContent="center">
-                <p>Left</p>
-            </Grid>
-        </Grid>
-
-        <Grid item xs={6}>
-            <MainFeed posts={posts}/>
-        </Grid>
-
-        <Grid item xs={3}>
-            <Grid container justifyContent="center">
-                <p>Right</p>
-            </Grid>
-        </Grid>
-    </Grid>
-    */
 }
