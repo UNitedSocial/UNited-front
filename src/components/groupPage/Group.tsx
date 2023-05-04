@@ -1,6 +1,6 @@
 import "./group.css"
 import {useLocation, useNavigate, useParams} from "react-router-dom";
-import {Alert, AlertTitle, Box, CircularProgress, Grid, Paper, Stack, Typography} from "@mui/material";
+import {Alert, AlertTitle, Box, CircularProgress, Grid, Paper, Stack, Typography,TextField,Button} from "@mui/material";
 import React, {useEffect, useState} from "react";
 import {MdGroupAdd, MdGroupRemove} from "react-icons/md";
 import {getGroup} from "../../backendConnection/getGroup";
@@ -9,6 +9,7 @@ import {postUserGroupRequest} from "../../backendConnection/postUserGroupRequest
 import {useAuth0} from "@auth0/auth0-react";
 import {getUserStateGroup} from "../../backendConnection/getUserStateGroup";
 import {RxClock} from "react-icons/rx";
+import GroupSectionCreationTemplate from "./GroupSectionCreationTemplate";
 
 
 function Group() {
@@ -52,6 +53,7 @@ function Group() {
         setIsLoading(false);
     }
 
+
     if (isLoading) {
         return (
             <>
@@ -88,9 +90,18 @@ function Group() {
                     </Stack>
 
                 </Box>
+               
+                <GroupSectionCreationTemplate />
+               
             </>
         )
     }
+
+    /* componentes que solo se muestran a un editor de grupo
+    if (userState == 'belongs'){
+        return
+    } 
+    */
 
     return (<>
             <Paper
