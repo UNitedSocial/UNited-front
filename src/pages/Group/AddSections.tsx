@@ -1,4 +1,5 @@
-import React, { useState} from 'react'
+import { useState} from 'react';
+import * as React from "react";
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -9,35 +10,76 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import { SectionElement } from '../../interfaces/Groups/SectionElement';
+import { postSections } from '../../backendConnection/Groups/postSections';
+import {useLocation, useNavigate, useParams} from "react-router-dom";
+import {useAuth0} from "@auth0/auth0-react";
 
 function AddSections (){
+
+    let {groupname} = useParams();
+    let {getAccessTokenSilently, user} = useAuth0();
+    const location = useLocation();
+    const navigate = useNavigate();
+
     const [formValues, setFormValues] = useState<string[]>([])
+    const [sections, setSections] = useState<SectionElement[]>([])
+
+
 
     const handleChange = (e: SelectChangeEvent) =>{
         setFormValues([...formValues, e.target.value as string ])
+        const newSection:SectionElement = {
+            position: formValues.length,
+            type : "",
+            content : ""
+        }
+        setSections([...sections, newSection])
     };
 
     const formButtons = () =>{
         if (formValues.length !== 0){
             return <>
-                <Button>
+                 <Stack spacing={1} direction="row">
+                 <Button variant="contained"  onClick={() => postSections(groupname,sections, getAccessTokenSilently).then(() => {
+                            /*
+                            const queryParams = new URLSearchParams(location.search);
+                            queryParams.set("state", "");
+                            navigate({search: queryParams.toString()});
+                            */
+                        })}>
                     Guardar Cambios
                 </Button>
-                <Button onClick={()=>handleCancel()}>
+                <Button variant="contained"  onClick={()=>handleCancel()}>
                     Cancelar
                 </Button>
+                </Stack>
+                
             </>
         }
     }
 
     const handleCancel = () =>{
         setFormValues([])
+        setSections([])
     }
 
     const handleRemove = (index: number) =>{
-        const list = [...formValues]
-        list.splice(index,1)
-        setFormValues(list)
+        const list_form = [...formValues]
+        const list_inputs = [...sections]
+        list_form.splice(index,1)
+        list_inputs.splice(index,1)
+        setFormValues(list_form)
+        setSections(list_inputs)
+    }
+    const handleChangeInput = (index:number,type:string,contenido:string) =>{
+        const modSection:SectionElement = {
+            position: index,
+            type: type,
+            content: contenido
+        }
+        sections[index] = modSection;
+
     }
 
     return (
@@ -59,7 +101,7 @@ function AddSections (){
                 </Select>
             </FormControl>
             {
-                formValues.map((element: string, index) =>{
+                formValues.map((element: string, index:number) =>{
                     if(element === 'Titulo')
                     return<>
                     <Box sx={{border:1,borderRadius: 2,width: '100%', bgcolor: '#f5f5f5', m:2,fontSize:32}}>
@@ -70,7 +112,9 @@ function AddSections (){
                             fullWidth={true}
                             label="Título"
                             variant="outlined"
-                            sx = {{m:2, bgcolor: '#fafafa'}}/> 
+                            sx = {{m:2, bgcolor: '#fafafa'}}
+                            onChange={(newValue)=>handleChangeInput(index,"title",newValue.currentTarget.value)}
+                        /> 
                         <IconButton aria-label="delete" size="small" onClick={()=>handleRemove(index)}>
                         <DeleteIcon fontSize="inherit" />
                         </IconButton>
@@ -88,7 +132,10 @@ function AddSections (){
                             fullWidth={true}
                             label="Subtítulo"
                             variant="outlined"
-                            sx = {{m:2, bgcolor: '#fafafa'}}/> 
+                            sx = {{m:2, bgcolor: '#fafafa'}}
+                            onChange={(newValue)=>handleChangeInput(index,"subtitle",newValue.currentTarget.value)}
+                        /> 
+                         
                         <IconButton aria-label="delete" size="small" onClick={()=>handleRemove(index)}>
                         <DeleteIcon fontSize="inherit" />
                         </IconButton>
@@ -107,6 +154,7 @@ function AddSections (){
                             fullWidth={true}
                             rows={4}
                             sx = {{m:2, bgcolor: '#fafafa'}}
+                            onChange={(newValue)=>handleChangeInput(index,"paragraph",newValue.currentTarget.value)}
                         /> 
                         <IconButton aria-label="delete" size="small" onClick={()=>handleRemove(index)}>
                         <DeleteIcon fontSize="inherit" />
@@ -117,7 +165,9 @@ function AddSections (){
                     </>                       
                      
                     if(element === 'Imagenes')
-                    return <Box sx={{border: 1,borderRadius: 2,width: '100%', bgcolor: '#eeeeee',m:2}}>
+                    return <>
+                        {handleChangeInput(index,"carrousel","conjunto de imagenes correspondientes")}
+                        <Box sx={{border: 1,borderRadius: 2,width: '100%', bgcolor: '#eeeeee',m:2}}>
                         <Stack direction="row" alignItems="center" spacing={1}>  
                         <Typography sx={{ fontSize: 14 , m:2}} color="text.secondary" gutterBottom>
                              Conjunto de imagenes (Guardar cambios para visualizar)
@@ -128,6 +178,7 @@ function AddSections (){
                         </Stack>
 
                     </Box> 
+                    </>
                     
                     
                     
