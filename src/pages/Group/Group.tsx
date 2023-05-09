@@ -16,6 +16,7 @@ import {getGroupSimilar} from "../../backendConnection/Groups/getGroupSimilar";
 import {getGroupRequests} from "../../backendConnection/Groups/getGroupRequests";
 import {getUserStateGroup} from "../../backendConnection/Users/getUserStateGroup";
 import EditCard from "../../components/Groups/groupPage/editCard/EditCard";
+import AddSections from "./AddSections";
 
 
 function Group() {
@@ -117,6 +118,7 @@ function Group() {
 
             <Grid item xs={6}>
                 <GroupCard group={group} userState={userState} isPosting={isPosting}/>
+                <AddSections/>
             </Grid>
 
             <Grid item xs={3}>
@@ -124,10 +126,12 @@ function Group() {
                     <Stack spacing={4}>
                         <UtilityMenu/>
                         <EditCard />
-                        <RequestsCard groupRequests={groupRequests}/>
+                        <RequestsCard groupRequests={groupRequests}/>            
+
                     </Stack>
                 </Grid>
             </Grid>
+            
         </Grid>
     )
 }
