@@ -38,6 +38,8 @@ const topicOptions = ["Ingeniería"];
 
 export default function GroupForm(props: any) {
 
+    const {edit} = props;
+
     const newGroupElement: GroupElement = {
         username: "i1",
         group: {

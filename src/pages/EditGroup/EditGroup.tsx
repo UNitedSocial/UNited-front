@@ -9,6 +9,7 @@ import {getUserStateGroup} from "../../backendConnection/Users/getUserStateGroup
 import LoadingScreen from "../Loading/LoadingScreen";
 import ErrorMessage from "../Error/ErrorMessage";
 import {GroupElement} from "../../interfaces/Groups/GroupElement";
+import dayjs from "dayjs";
 
 export default function EditGroup(props: any) {
 
@@ -39,7 +40,10 @@ export default function EditGroup(props: any) {
 
     const loadedGroup = (data: any) => {
         try {
-            setGroupElement(data as GroupElement);
+            const loadedGroup = {group: data};
+            loadedGroup.group.info.creationDate = dayjs(loadedGroup?.group?.info?.creationDate);
+            loadedGroup.group.info.fundationDate = dayjs(loadedGroup?.group?.info?.fundationDate);
+            setGroupElement(loadedGroup);
         } catch {
             errorLoading({} as JSON);
         }
@@ -58,7 +62,7 @@ export default function EditGroup(props: any) {
         setIsLoadingState(false);
     }
 
-    if (isLoading) {
+    if (isLoadingState) {
         return (
             <LoadingScreen/>
         )
@@ -69,6 +73,9 @@ export default function EditGroup(props: any) {
             <ErrorMessage/>
         )
     }
+
+    console.log("groupElement");
+    console.log(groupElement);
 
     if(groupElement !== undefined){
         return (
@@ -81,7 +88,7 @@ export default function EditGroup(props: any) {
                 </Grid>
 
                 <Grid item xs={6}>
-                    <GroupForm group={groupElement}/>
+                    <GroupForm group={groupElement} edit={true}/>
                 </Grid>
 
                 <Grid item xs={3}>

@@ -48,7 +48,7 @@ export default function NewGroup(props: any) {
             </Grid>
 
             <Grid item xs={6}>
-                <GroupForm group={newGroupElement}/>
+                <GroupForm group={newGroupElement} edit={false}/>
             </Grid>
 
             <Grid item xs={3}>
