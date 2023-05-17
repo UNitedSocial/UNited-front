@@ -6,7 +6,6 @@ export default function Notification(props: any) {
     const {notificationDTO} = props;
     const {setNotificationDTO} = props;
 
-    console.log("notificationDTO", notificationDTO)
 
     const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
         if (reason === "clickaway") {

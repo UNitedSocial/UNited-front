@@ -4,7 +4,7 @@ import GroupRequests from "../groupRequests/GroupRequests";
 
 export default function RequestsCard(props: any) {
 
-    const {groupRequests, toogleUpdate, toogleIsLoadingScreen} = props;
+    const {groupRequests, toogleUpdate, toogleIsLoadingScreen, toogleNotification} = props;
 
 
     return (
@@ -18,7 +18,7 @@ export default function RequestsCard(props: any) {
                 </Typography>
 
                 <Stack>
-                    {groupRequests?.map((r: any, idx: any) => (<GroupRequests key={idx} request={r} toogleUpdate={toogleUpdate} toogleIsLoadingScreen={toogleIsLoadingScreen}/>))}
+                    {groupRequests?.map((r: any, idx: any) => (<GroupRequests key={idx} request={r} toogleUpdate={toogleUpdate} toogleIsLoadingScreen={toogleIsLoadingScreen} toogleNotification={toogleNotification}/>))}
                 </Stack>
             </CardContent>
         </Card>

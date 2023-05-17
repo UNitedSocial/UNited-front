@@ -8,11 +8,9 @@ import Notification from "../../Notification/Notification";
 
 export default function GroupRequests(props: any) {
 
-    let {request, toogleUpdate, toogleIsLoadingScreen} = props;
+    let {request, toogleUpdate, toogleIsLoadingScreen, toogleNotification} = props;
     let {groupname} = useParams();
     let {getAccessTokenSilently, user} = useAuth0();
-
-    const [notificationDTO, setNotificationDTO] = useState<any>({open: false, message: "", severity: "info"});
 
     return (
         <li className="sidebarFriend">
@@ -26,7 +24,7 @@ export default function GroupRequests(props: any) {
                             toogleIsLoadingScreen(true);
                             putGroupRequest(user?.nickname, "approved", request?.username, groupname, getAccessTokenSilently).then(() => toogleUpdate()).catch(e => {
                                 toogleIsLoadingScreen(false);
-                                setNotificationDTO({open: true, message: e?.message, severity: "error"});
+                                toogleNotification(e?.message, "error");
                             })
                         }}
                         style={{
@@ -45,7 +43,7 @@ export default function GroupRequests(props: any) {
                             toogleIsLoadingScreen(true);
                             putGroupRequest(user?.nickname, "rejected", request?.username, groupname, getAccessTokenSilently).then(() => toogleUpdate()).catch(e => {
                                 toogleIsLoadingScreen(false);
-                                setNotificationDTO({open: true, message: e?.message, severity: "error"});
+                                toogleNotification(e?.message, "error");
                             })
                         }}
                         style={{
@@ -59,7 +57,6 @@ export default function GroupRequests(props: any) {
                     </button>
                 </Grid>
             </Grid>
-            <Notification notificationDTO={notificationDTO} setNotificationDTO={setNotificationDTO}/>
         </li>
     )
 }

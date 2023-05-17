@@ -13,6 +13,7 @@ import {getGroupSimilar} from "../../backendConnection/Groups/getGroupSimilar";
 import {getUserStateGroup} from "../../backendConnection/Users/getUserStateGroup";
 import EditCard from "../../components/Groups/editCard/EditCard";
 import MemberCard from "../../components/Groups/memberCard/MemberCard";
+import Notification from "../../components/Notification/Notification";
 
 
 function Group() {
@@ -29,6 +30,7 @@ function Group() {
 
     const [update, setUpdate] = useState<boolean>(false);
     const [isLoadingScreen, setIsLoadingScreen] = useState(false);
+    const [notificationDTO, setNotificationDTO] = useState<any>({open: false, message: "", severity: "info"})
     const [hasErrorLoading, sethasErrorLoading] = useState<JSON | null>(null);
     const [isPosting, setIsPosting] = useState(false);
 
@@ -38,6 +40,10 @@ function Group() {
 
     const toogleUpdate = () => {
         setUpdate(!update);
+    }
+
+    const toogleNotification = (message: string, severity: "success" | "info" | "warning" | "error") => {
+        setNotificationDTO({open: true, message: message, severity: severity});
     }
 
     useEffect(() => {
@@ -119,7 +125,7 @@ function Group() {
                         {userState === "editor" ?
                             <>
                                 <EditCard/>
-                                <RequestsCard groupRequests={groupRequests} toogleUpdate={toogleUpdate} toogleIsLoadingScreen={toogleIsLoadingScreen}/>
+                                <RequestsCard groupRequests={groupRequests} toogleUpdate={toogleUpdate} toogleIsLoadingScreen={toogleIsLoadingScreen} toogleNotification={toogleNotification}/>
                             </>
                             : null
                         }
@@ -127,6 +133,7 @@ function Group() {
                 </Grid>
             </Grid>
 
+            <Notification notificationDTO={notificationDTO} setNotificationDTO={setNotificationDTO}/>
         </Grid>
     )
 }

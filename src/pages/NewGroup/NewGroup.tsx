@@ -2,6 +2,8 @@ import {Grid} from "@mui/material";
 import {GroupElement} from "../../interfaces/Groups/GroupElement";
 import UtilityMenu from "../../components/UtilityMenu/UtilityMenu";
 import GroupForm from "../../components/GroupForm/GroupForm";
+import React, {useState} from "react";
+import Notification from "../../components/Notification/Notification";
 
 export default function NewGroup(props: any) {
 
@@ -38,6 +40,12 @@ export default function NewGroup(props: any) {
         }
     }
 
+    const [notificationDTO, setNotificationDTO] = useState<any>({open: false, message: "", severity: "info"})
+
+    const toogleNotification = (message: string, severity: "success" | "info" | "warning" | "error") => {
+        setNotificationDTO({open: true, message: message, severity: severity});
+    }
+
     return (
 
         <Grid container>
@@ -48,7 +56,7 @@ export default function NewGroup(props: any) {
             </Grid>
 
             <Grid item xs={6}>
-                <GroupForm group={newGroupElement} edit={false}/>
+                <GroupForm group={newGroupElement} edit={false} toogleNotification={toogleNotification}/>
             </Grid>
 
             <Grid item xs={3}>
@@ -56,6 +64,9 @@ export default function NewGroup(props: any) {
                     <UtilityMenu/>
                 </Grid>
             </Grid>
+
+            <Notification notificationDTO={notificationDTO} setNotificationDTO={setNotificationDTO}/>
+
         </Grid>
 
     )

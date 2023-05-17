@@ -28,7 +28,6 @@ import {GroupElement} from "../../interfaces/Groups/GroupElement";
 import LoadingScreen from "../../pages/Loading/LoadingScreen";
 import {isValidPhoneNumber} from "../../validations/isValidPhoneNumber";
 import {isValidEmail} from "../../validations/isValidEmail";
-import Notification from "../Notification/Notification";
 import {postGroup} from "../../backendConnection/Groups/postGroup";
 import AddSections from "./AddSections";
 
@@ -38,7 +37,7 @@ const topicOptions = ["Ingeniería"];
 
 export default function GroupForm(props: any) {
 
-    const {edit, sections} = props;
+    const {edit, sections, toogleNotification} = props;
 
     const newGroupElement: GroupElement = {
         username: "i1",
@@ -76,7 +75,6 @@ export default function GroupForm(props: any) {
     const {getAccessTokenSilently} = useAuth0();
     const [isPosting, setIsPosting] = useState(false)
     const [groupElement, setGroupElement] = useState<GroupElement>(newGroupElement);
-    const [notificationDTO, setNotificationDTO] = useState<any>({open: false, message: "", severity: "info"})
 
 
     useEffect(() => {
@@ -511,7 +509,6 @@ export default function GroupForm(props: any) {
         {edit ?
             <AddSections sectionsProp={sections}/> : null}
 
-        <Notification notificationDTO={notificationDTO} setNotificationDTO={setNotificationDTO}/>
         <br/>
     </Box>)
 
@@ -564,15 +561,15 @@ export default function GroupForm(props: any) {
     }
 
     function handleSuccess() {
-        setNotificationDTO({open: true, message: "Grupo creado exitosamente", severity: "success"});
+        toogleNotification("Grupo creado exitosamente", "success");
     }
 
     function handleSubmitError(e: any) {
         setIsPosting(false);
         if (e?.response?.data?.message === undefined) {
-            setNotificationDTO({open: true, message: e?.message, severity: "error"});
+            toogleNotification(e?.message, "error");
         } else {
-            setNotificationDTO({open: true, message: e?.response?.data?.message, severity: "error"});
+            toogleNotification(e?.response?.data?.message, "error");
         }
     }
 }
