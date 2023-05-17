@@ -64,7 +64,7 @@ function TopNavBar() {
 
     useEffect(() => {
         if (isAuthenticated) {
-            postUserInformation(getAccessTokenSilently).then();
+            postUserInformation(getAccessTokenSilently, user).then();
         }
     }, [isAuthenticated]);
 

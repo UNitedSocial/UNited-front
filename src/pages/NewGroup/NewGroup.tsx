@@ -1,7 +1,7 @@
 import {Grid} from "@mui/material";
 import {GroupElement} from "../../interfaces/Groups/GroupElement";
 import UtilityMenu from "../../components/UtilityMenu/UtilityMenu";
-import GroupForm from "../../components/Groups/groupForm/GroupForm";
+import GroupForm from "../../components/GroupForm/GroupForm";
 
 export default function NewGroup(props: any) {
 
@@ -24,7 +24,7 @@ export default function NewGroup(props: any) {
                     }
                 },
                 topics: [],
-                classification: "",
+                clasification: "",
                 isRecognized: false,
                 recognizedInfo: {
                     type: "",

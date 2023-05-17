@@ -1,7 +1,7 @@
 import {Grid} from "@mui/material";
-import GroupForm from "../../components/Groups/groupForm/GroupForm";
+import GroupForm from "../../components/GroupForm/GroupForm";
 import UtilityMenu from "../../components/UtilityMenu/UtilityMenu";
-import UserProfile from "../../components/Users/userPage/UserProfile";
+import UserProfile from "../../components/Users/UserProfile";
 
 export default function Profile(props: any) {
 

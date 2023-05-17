@@ -1,4 +1,3 @@
-import "./group.css"
 import {useParams} from "react-router-dom";
 import {Grid, Stack} from "@mui/material";
 import React, {useEffect, useState} from "react";
@@ -7,16 +6,13 @@ import {useAuth0} from "@auth0/auth0-react";
 import ErrorMessage from "../../pages/Error/ErrorMessage";
 import LoadingScreen from "../../pages/Loading/LoadingScreen";
 import UtilityMenu from "../../components/UtilityMenu/UtilityMenu";
-import GroupCard from "../../components/Groups/groupPage/groupCard/GroupCard";
-import RequestsCard from "../../components/Groups/groupPage/requestsCard/RequestsCard";
-import MemberCard from "../../components/Groups/groupPage/memberCard/MemberCard";
-import SimilarCard from "../../components/Groups/groupPage/similarCard/SimilarCard";
-import {getGroupMembers} from "../../backendConnection/Groups/getGroupMembers";
+import GroupCard from "../../components/Groups/groupCard/GroupCard";
+import RequestsCard from "../../components/Groups/requestsCard/RequestsCard";
+import SimilarCard from "../../components/Groups/similarCard/SimilarCard";
 import {getGroupSimilar} from "../../backendConnection/Groups/getGroupSimilar";
-import {getGroupRequests} from "../../backendConnection/Groups/getGroupRequests";
 import {getUserStateGroup} from "../../backendConnection/Users/getUserStateGroup";
-import EditCard from "../../components/Groups/groupPage/editCard/EditCard";
-import AddSections from "./AddSections";
+import EditCard from "../../components/Groups/editCard/EditCard";
+import MemberCard from "../../components/Groups/memberCard/MemberCard";
 
 
 function Group() {
@@ -31,26 +27,38 @@ function Group() {
     const [groupSimilars, setGroupSimilars] = useState<any>(null);
     const [groupRequests, setGroupRequests] = useState<any>(null);
 
-    const [isLoadingScreen, setIsLoadingScreen] = useState(true);
+    const [update, setUpdate] = useState<boolean>(false);
+    const [isLoadingScreen, setIsLoadingScreen] = useState(false);
     const [hasErrorLoading, sethasErrorLoading] = useState<JSON | null>(null);
     const [isPosting, setIsPosting] = useState(false);
 
+    const toogleIsLoadingScreen = (value: boolean) => {
+        setIsLoadingScreen(value);
+    }
+
+    const toogleUpdate = () => {
+        setUpdate(!update);
+    }
+
     useEffect(() => {
-        setIsLoadingScreen(true);
-        loadGroupInfo().then(() => setIsLoadingScreen(false)).catch(error => errorLoading(error));
-    }, [groupname, user, isLoadingScreen]);
+        toogleIsLoadingScreen(true);
+        loadGroupInfo().then(() => toogleIsLoadingScreen(false));
+    }, [groupname, user, update]);
 
     async function loadGroupInfo() {
-        getGroup(groupname).then(data => loadedGroup(data));
-        getUserStateGroup(groupname, user?.nickname).then(data => loadedUserState(data))
-        getGroupMembers(groupname).then(data => loadedGroupMembers(data));
-        getGroupSimilar(groupname).then(data => loadedGroupSimilar(data));
-        getGroupRequests(groupname).then(data => loadedGroupRequests(data));
+        await getGroup(groupname).then(data => loadedGroup(data)).catch(error => errorLoading(error));
+        await getGroupSimilar(groupname).then(data => loadedGroupSimilar(data)).catch(() => loadedGroupSimilar([]));
+        while (isLoading) {
+            await new Promise(r => setTimeout(r, 100));
+        }
+        await getUserStateGroup(groupname, user?.nickname).then(data => loadedUserState(data)).catch(() => loadedUserState([]));
     }
 
     const loadedGroup = (data: any) => {
         try {
             setGroup(data);
+            setGroupMembers(data.members);
+            setGroupRequests(data.requests);
         } catch {
             errorLoading({} as JSON);
         }
@@ -64,25 +72,9 @@ function Group() {
         }
     }
 
-    const loadedGroupMembers = (data: any) => {
-        try {
-            setGroupMembers(data);
-        } catch {
-            errorLoading({} as JSON);
-        }
-    }
-
     const loadedGroupSimilar = (data: any) => {
         try {
             setGroupSimilars(data);
-        } catch {
-            errorLoading({} as JSON);
-        }
-    }
-
-    const loadedGroupRequests = (data: any) => {
-        try {
-            setGroupRequests(data);
         } catch {
             errorLoading({} as JSON);
         }
@@ -110,28 +102,31 @@ function Group() {
             <Grid item xs={3}>
                 <Grid container justifyContent="center">
                     <Stack spacing={4}>
-                        <MemberCard groupMembers={groupMembers}/>
+                        <MemberCard groupMembers={groupMembers} userState={userState} groupName={groupname} toogleUpdate={toogleUpdate} toogleIsLoadingScreen={toogleIsLoadingScreen}/>
                         <SimilarCard groupSimilars={groupSimilars}/>
                     </Stack>
                 </Grid>
             </Grid>
 
             <Grid item xs={6}>
-                <GroupCard group={group} userState={userState} isPosting={isPosting}/>
-                <AddSections/>
+                <GroupCard group={group} userState={userState} isPosting={isPosting} toogleUpdate={toogleUpdate} toogleIsLoadingScreen={toogleIsLoadingScreen}/>
             </Grid>
 
             <Grid item xs={3}>
                 <Grid container justifyContent="center">
                     <Stack spacing={4}>
                         <UtilityMenu/>
-                        <EditCard />
-                        <RequestsCard groupRequests={groupRequests}/>            
-
+                        {userState === "editor" ?
+                            <>
+                                <EditCard/>
+                                <RequestsCard groupRequests={groupRequests} toogleUpdate={toogleUpdate} toogleIsLoadingScreen={toogleIsLoadingScreen}/>
+                            </>
+                            : null
+                        }
                     </Stack>
                 </Grid>
             </Grid>
-            
+
         </Grid>
     )
 }

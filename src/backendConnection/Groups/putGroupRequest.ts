@@ -11,9 +11,12 @@ export async function putGroupRequest(user: string | undefined, response: string
     });
 
     const groupRequestDTO = {
-        "username": username, //el que envía la solicitud
-        "answer": response //aceptar o rechazar
+        user: {
+            username: user
+        },
+        username: username,
+        answer: response
     }
 
-    await instance.put("/groups/" + groupname + "/requests", groupRequestDTO)
+    return await instance.put("/groups/" + groupname + "/requests", groupRequestDTO)
 }

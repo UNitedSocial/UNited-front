@@ -17,7 +17,7 @@ export interface GroupElement {
                 };
             };
             topics: string[];
-            classification: string;
+            clasification: string;
             isRecognized: boolean;
             recognizedInfo?: {
                 type?: string | undefined;

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export async function postGroup(group: any, getAccessTokenSilently: any) {
+export async function postGroup(group: any, getAccessTokenSilently: any, edit : any) {
     const token = await getAccessTokenSilently();
     const instance = axios.create({
         baseURL: "http://localhost:3002",
@@ -8,5 +8,12 @@ export async function postGroup(group: any, getAccessTokenSilently: any) {
             "Authorization": "Bearer " + token
         }
     });
-    await instance.post("/groups/createGroup", group)
+
+    console.log(group)
+
+    if(edit){
+        return await instance.put("/groups/" + group.group?.info?.name, group);
+    } else {
+        return await instance.post("/groups/", group);
+    }
 }

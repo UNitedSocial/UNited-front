@@ -15,15 +15,13 @@ export async function postUserGroupRequest(groupname: string | undefined, getAcc
             "groupName": groupname
         }
 
-        await instance.post("/groups/" + groupname + "/requests", groupNameDTO)
-    } else if (userState === "pending") {
-
-    } else if (userState === "belongs") {
+        return await instance.post("/groups/" + groupname + "/requests", groupNameDTO)
+    } else if (userState === "member" || userState === "editor") {
         const groupNameDTO = {
             "name": groupname,
             "user" : {"nickname": user}
         }
 
-        await instance.put("/users/quitGroup", groupNameDTO)
+        return await instance.put("/users/quitGroup", groupNameDTO)
     }
 }

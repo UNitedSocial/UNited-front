@@ -1,5 +1,5 @@
 import axios from "axios";
-import { SectionElement } from "../../interfaces/Groups/SectionElement";
+import {SectionElement} from "../../interfaces/Groups/SectionElement";
 
 export async function postSections(groupname: string | undefined, sections: SectionElement[], getAccessTokenSilently: any) {
     const token = await getAccessTokenSilently();
@@ -9,8 +9,16 @@ export async function postSections(groupname: string | undefined, sections: Sect
             "Authorization": "Bearer " + token
         }
     });
-    for (var i = 0;i < sections.length;i++){
-    const sectionRequestDTO = sections[i]
-    await instance.post("/groups/" + groupname + "sections", sectionRequestDTO)
+    for (let i = 0; i < sections.length; i++) {
+        const sectionRequestDTO = {
+            "position": sections[i].position,
+            "section": {
+                "content": {
+                    [sections[i].type]: sections[i].content
+                }
+            }
+        };
+
+        return await instance.put("/" + groupname + "/sections", sectionRequestDTO)
     }
 }

@@ -1,14 +1,13 @@
 import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import {Grid} from "@mui/material";
-import GroupForm from "../../components/Groups/groupForm/GroupForm";
+import GroupForm from "../../components/GroupForm/GroupForm";
 import UtilityMenu from "../../components/UtilityMenu/UtilityMenu";
 import {useAuth0} from "@auth0/auth0-react";
 import {getGroup} from "../../backendConnection/Groups/getGroup";
 import {getUserStateGroup} from "../../backendConnection/Users/getUserStateGroup";
 import LoadingScreen from "../Loading/LoadingScreen";
 import ErrorMessage from "../Error/ErrorMessage";
-import {GroupElement} from "../../interfaces/Groups/GroupElement";
 import dayjs from "dayjs";
 
 export default function EditGroup(props: any) {
@@ -18,15 +17,20 @@ export default function EditGroup(props: any) {
     const {user, isLoading} = useAuth0();
 
     const [groupElement, setGroupElement] = useState<any>();
+    const [sections, setSections] = useState<any>();
     const [userState, setUserState] = useState<any>(null);
 
     const [isLoadingState, setIsLoadingState] = useState(true);
     const [hasErrorLoading, sethasErrorLoading] = useState<JSON | null>(null);
-    const [isPosting, setIsPosting] = useState(false);
 
     useEffect(() => {
-        loadGroupInfo().then(() => setIsLoadingState(false)).catch(error => errorLoading(error));
+        toogleIsLoadingState(true);
+        loadGroupInfo().then(() => toogleIsLoadingState(false));
     }, []);
+
+    const toogleIsLoadingState = (value: boolean) => {
+        setIsLoadingState(value);
+    }
 
     useEffect(() => {
         setIsLoadingState(true);
@@ -34,8 +38,8 @@ export default function EditGroup(props: any) {
     }, [groupname, user, isLoading]);
 
     async function loadGroupInfo() {
-        getGroup(groupname).then(data => loadedGroup(data));
-        getUserStateGroup(groupname, user?.nickname).then(data => loadedUserState(data))
+        await getGroup(groupname).then(data => loadedGroup(data)).catch(error => errorLoading(error));
+        await getUserStateGroup(groupname, user?.nickname).then(data => loadedUserState(data)).catch(error => errorLoading(error))
     }
 
     const loadedGroup = (data: any) => {
@@ -43,6 +47,7 @@ export default function EditGroup(props: any) {
             const loadedGroup = {group: data};
             loadedGroup.group.info.creationDate = dayjs(loadedGroup?.group?.info?.creationDate);
             loadedGroup.group.info.fundationDate = dayjs(loadedGroup?.group?.info?.fundationDate);
+            setSections(data.page);
             setGroupElement(loadedGroup);
         } catch {
             errorLoading({} as JSON);
@@ -74,12 +79,8 @@ export default function EditGroup(props: any) {
         )
     }
 
-    console.log("groupElement");
-    console.log(groupElement);
-
-    if(groupElement !== undefined){
+    if (groupElement !== undefined && userState === "editor") {
         return (
-
             <Grid container>
                 <Grid item xs={3}>
                     <Grid container justifyContent="center">
@@ -88,7 +89,7 @@ export default function EditGroup(props: any) {
                 </Grid>
 
                 <Grid item xs={6}>
-                    <GroupForm group={groupElement} edit={true}/>
+                    <GroupForm group={groupElement} sections={sections} edit={true}/>
                 </Grid>
 
                 <Grid item xs={3}>

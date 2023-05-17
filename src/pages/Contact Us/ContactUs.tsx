@@ -1,6 +1,6 @@
 import {Grid} from "@mui/material";
 import UtilityMenu from "../../components/UtilityMenu/UtilityMenu";
-import ContactForm from "../../components/contactForm/ContactForm";
+import ContactForm from "../../components/Contact Us/ContactForm";
 
 export default function ContactUs(props: any) {
 
