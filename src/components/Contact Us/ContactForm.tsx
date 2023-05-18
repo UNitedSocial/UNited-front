@@ -1,15 +1,14 @@
 import {Box, Button, CircularProgress, Grid, Stack, TextField} from "@mui/material";
 import * as React from "react";
 import {useState} from "react";
-import {useAuth0} from "@auth0/auth0-react";
 import axios from "axios";
 import Notification from "../Notification/Notification";
-import Popup from "../Modal/Popup"
+import Popup from "./Modal/Popup"
 
 
 function ContactForm() {
 
-    const {user, isAuthenticated, getAccessTokenSilently, isLoading} = useAuth0();
+    // const {user, isAuthenticated, getAccessTokenSilently, isLoading} = useAuth0();
     const [isPosting, setIsPosting] = useState(false)
     const [formElement, setFormElement] = useState({
         contactForm: {
@@ -66,7 +65,7 @@ function ContactForm() {
                                 Estaremos encantados de responder cualquier pregunta que puedas tener. Tan pronto como
                                 recibamos tu mensaje, te responderemos lo antes posible.
                             </p>
-                            <a href="https://wa.me/+573004567869" target="_blank" style={{
+                            <a href="https://wa.me/+573004567869" target="_blank" rel="noreferrer" style={{
                                 textDecoration: "none",
                                 color: "#010103",
                                 fontSize: "1.4rem",
@@ -75,7 +74,7 @@ function ContactForm() {
                             }}>
                                 Whatsapp: +57 300 456 7869
                             </a>
-                            <a href="mailto:united@mail.com" target="_blank" style={{
+                            <a href="mailto:united@mail.com" target="_blank" rel="noreferrer" style={{
                                 textDecoration: "none",
                                 color: "#010103",
                                 fontSize: "1.4rem",
@@ -137,7 +136,7 @@ function ContactForm() {
                                             }
                                         });
                                         setIsPosting(false);
-                                    }).catch(e => handleSubmitError(e))}>
+                                    }).catch(() => handleSubmitError())}>
                                 Enviar mensaje
                             </Button>
                             <Popup/>
@@ -159,10 +158,10 @@ function ContactForm() {
 
         setIsPosting(true);
 
-        const response = await axios.post("http://localhost:3002/api/group", formElement);
+        await axios.post("http://localhost:3002/api/group", formElement);
     }
 
-    function handleSubmitError(e: any) {
+    function handleSubmitError() {
         setIsPosting(false);
         setNotificationDTO({open: true, message: "Error al enviar mensaje", severity: "error"});
     }

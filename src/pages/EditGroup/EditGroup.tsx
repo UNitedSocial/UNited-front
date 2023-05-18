@@ -9,6 +9,7 @@ import {getUserStateGroup} from "../../backendConnection/Users/getUserStateGroup
 import LoadingScreen from "../Loading/LoadingScreen";
 import ErrorMessage from "../Error/ErrorMessage";
 import dayjs from "dayjs";
+import Notification from "../../components/Notification/Notification";
 
 export default function EditGroup(props: any) {
 
@@ -22,6 +23,11 @@ export default function EditGroup(props: any) {
 
     const [isLoadingState, setIsLoadingState] = useState(true);
     const [hasErrorLoading, sethasErrorLoading] = useState<JSON | null>(null);
+    const [notificationDTO, setNotificationDTO] = useState<any>({open: false, message: "", severity: "info"})
+
+    const toogleNotification = (message: string, severity: "success" | "info" | "warning" | "error") => {
+        setNotificationDTO({open: true, message: message, severity: severity});
+    }
 
     useEffect(() => {
         toogleIsLoadingState(true);
@@ -89,7 +95,8 @@ export default function EditGroup(props: any) {
                 </Grid>
 
                 <Grid item xs={6}>
-                    <GroupForm group={groupElement} sections={sections} edit={true}/>
+                    <GroupForm group={groupElement} sections={sections} edit={true}
+                               toogleNotification={toogleNotification}/>
                 </Grid>
 
                 <Grid item xs={3}>
@@ -97,6 +104,9 @@ export default function EditGroup(props: any) {
                         <UtilityMenu/>
                     </Grid>
                 </Grid>
+
+                <Notification notificationDTO={notificationDTO} setNotificationDTO={setNotificationDTO}/>
+
             </Grid>
 
         )

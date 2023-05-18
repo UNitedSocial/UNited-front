@@ -1,12 +1,3 @@
-.rightbar {
-    flex: 3;
-    height: calc(100vh - 3.125em);
-    overflow-y: scroll;
-    position: sticky;
-    top: 3.125em;
-    margin-top: -6.250em;
-}
-
 ::-webkit-scrollbar {
     width: 0.313em;
 }
@@ -19,39 +10,4 @@
     background-color: rgb(179, 179, 179);
 }
 
-.rightbarWrapper {
-    padding: 1.250em;
-    margin-right: 1.875em;
 
-}
-
-.rightbarList {
-    padding: 0;
-    list-style: none;
-    margin: 1.750em 0 0;
-}
-
-.rightbarListItem {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1.250em;
-}
-
-.rightbarIcon {
-    margin-right: 0.938em;
-}
-
-
-.rightbarHr {
-    margin: 1.250em 0;
-}
-
-.rightbarGroupList {
-    padding: 0;
-
-}
-
-.rightListItemText {
-
-    font-weight: bold;
-}

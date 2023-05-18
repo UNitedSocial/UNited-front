@@ -1,7 +1,5 @@
 import * as React from "react";
 import {useEffect, useState} from "react";
-
-import "./groupForm.css"
 import {
     Autocomplete,
     Box,
@@ -561,7 +559,12 @@ export default function GroupForm(props: any) {
     }
 
     function handleSuccess() {
-        toogleNotification("Grupo creado exitosamente", "success");
+        setIsPosting(false);
+        if(edit){
+            toogleNotification("Grupo editado exitosamente", "success");
+        } else {
+            toogleNotification("Grupo creado exitosamente", "success");
+        }
     }
 
     function handleSubmitError(e: any) {
