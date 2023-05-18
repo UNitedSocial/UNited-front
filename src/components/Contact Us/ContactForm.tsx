@@ -4,6 +4,7 @@ import {useState} from "react";
 import {useAuth0} from "@auth0/auth0-react";
 import axios from "axios";
 import Notification from "../Notification/Notification";
+import Popup from "../Modal/Popup"
 
 
 function ContactForm() {
@@ -139,6 +140,7 @@ function ContactForm() {
                                     }).catch(e => handleSubmitError(e))}>
                                 Enviar mensaje
                             </Button>
+                            <Popup/>
                         </Stack>
                     </Grid>
                 </Grid>
