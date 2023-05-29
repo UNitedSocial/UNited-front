@@ -20,29 +20,21 @@ import {
 import React, {useEffect, useState} from "react";
 import {useAuth0} from "@auth0/auth0-react";
 import UNited_logo from "../../assets/united_logo_no_bg_white.png";
-import {BiFilterAlt, BiSearch, BiSortAlt2} from "react-icons/bi";
+import {BiSearch} from "react-icons/bi";
 import {useLocation, useNavigate} from "react-router-dom"
 import {postUserInformation} from "../../backendConnection/Users/postUserInformation";
 
-const settings = ["Perfil", "Cuenta", "Panel de estadísticas", "Cerrar sesión"];
 const pages = ["Contáctanos"];
 
 function TopNavBar() {
-
-
-    const [nav, setNav] = useState(false);
-
-
-    const openNav = () => {
-        setNav(!nav);
-    };
 
     const [openToast, setOpenToast] = useState(false);
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
     const [selectedOption, setSelectedOption] = useState("");
     const [value, setValue] = useState("");
+    const [webRole, setWebRole] = useState<any>("");
 
-    const {loginWithRedirect} = useAuth0();
+    const {loginWithRedirect, isLoading} = useAuth0();
     const {logout} = useAuth0();
     const {user, isAuthenticated, getAccessTokenSilently} = useAuth0();
 
@@ -55,6 +47,9 @@ function TopNavBar() {
             if (selectedOption === "Perfil") {
                 navigate("/profile");
             }
+            if (selectedOption === "Administrar página") {
+                navigate("/admin");
+            }
             if (selectedOption === "Cerrar sesión") {
                 logout();
             }
@@ -64,20 +59,28 @@ function TopNavBar() {
 
     useEffect(() => {
         if (isAuthenticated) {
-            postUserInformation(getAccessTokenSilently, user).then();
+            postUserInformation(getAccessTokenSilently, user).then(r => setWebRole(r));
         }
+        handleWelcomeToast();
     }, [isAuthenticated]);
 
     useEffect(() => {
         setValue("");
     }, [location]);
 
+    const handleWelcomeToast = async () => {
+        while (isLoading) {
+            await new Promise(r => setTimeout(r, 100));
+        }
+        setOpenToast(true);
+    }
+
 
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         if (isAuthenticated) {
             setAnchorElUser(event.currentTarget);
         } else {
-            loginWithRedirect().then(() => setOpenToast(true));
+            loginWithRedirect().then();
             setSelectedOption("")
             setAnchorElUser(event.currentTarget);
         }
@@ -200,18 +203,24 @@ function TopNavBar() {
                             open={isAuthenticated ? Boolean(anchorElUser) : false}
                             onClose={handleCloseUserMenu}
                         >
-                            {settings.map((setting, idx) => (
-                                <MenuItem key={idx} onClick={handleCloseUserMenu}>
-                                    <Typography textAlign="center">{setting}</Typography>
+                            <MenuItem onClick={handleCloseUserMenu}>
+                                <Typography textAlign="center">Perfil</Typography>
+                            </MenuItem>
+                            {webRole === "master" ?
+                                <MenuItem onClick={handleCloseUserMenu}>
+                                    <Typography textAlign="center">Administrar página</Typography>
                                 </MenuItem>
-                            ))}
+                                : null}
+                            <MenuItem onClick={handleCloseUserMenu}>
+                                <Typography textAlign="center">Cerrar sesión</Typography>
+                            </MenuItem>
                         </Menu>
                     </Box>
                 </Toolbar>
             </Container>
             <Snackbar open={openToast} autoHideDuration={6000} onClose={() => setOpenToast(false)}>
-                <Alert onClose={() => setOpenToast(false)} severity="success" sx={{width: "100%"}}>
-                    This is a success message!
+                <Alert onClose={() => setOpenToast(false)} severity="info" sx={{width: "100%"}}>
+                    {isAuthenticated ? "Bienvenido " + user?.name + "!" : "Inicia sesión para acceder a tu perfil"}
                 </Alert>
             </Snackbar>
         </AppBar>

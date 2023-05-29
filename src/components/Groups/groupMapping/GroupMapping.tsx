@@ -1,12 +1,12 @@
 import {Link} from "react-router-dom";
 import * as React from "react";
+import "./GroupMapping.css";
 
-export default function GroupMapping({group}: any) {
+export default function GroupMapping({groupName}: any) {
     return (
-
         <li className="sidebarSimilar">
-            <Link to={"/group/" + group?.group?.name}>
-                <span>{group?.group?.name}</span>
+            <Link to={"/group/" + groupName}>
+                <span>{groupName}</span>
             </Link>
         </li>
 

@@ -1,11 +1,13 @@
 import React, {useState} from 'react';
 import ErrorReportForm from './ErrorReportForm';
 import Button from '@mui/material/Button';
-import {Backdrop, Modal} from "@mui/material";
+import {Modal} from "@mui/material";
 
-function Popup() {
+function Popup(props: any) {
 
     const [showModal, setShowModal] = useState(false);
+
+    const {toogleNotification} = props;
 
     const handleOpenModal = () => {
         setShowModal(true);
@@ -22,7 +24,9 @@ function Popup() {
                 open={showModal}
                 onClose={handleCloseModal}
             >
-                <ErrorReportForm/>
+                <>
+                    <ErrorReportForm toogleNotification={toogleNotification} handleCloseModal={handleCloseModal}/>
+                </>
             </Modal>
         </>
     );

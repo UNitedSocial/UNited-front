@@ -53,10 +53,10 @@ export default function Feed(props: any) {
     const handleComponentLoaded = async (first: boolean) => {
         toogleIsLoading(true);
         if (location.pathname.startsWith("/search")) {
-            setIsLoading(true)
+            setIsLoading(true);
             await searchGroup(query, filters, orders, descending).then(data => loadedPosts(data, false)).catch(error => errorLoading(error));
         } else {
-            setIsLoading(true)
+            setIsLoading(true);
             await loadPosts(0).then(data => loadedPosts(data, first)).catch(error => errorLoading(error));
         }
     }

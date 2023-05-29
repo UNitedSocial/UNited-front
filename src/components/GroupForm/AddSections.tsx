@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -15,23 +15,33 @@ import {postSections} from '../../backendConnection/Groups/postSections';
 import {useParams} from "react-router-dom";
 import {useAuth0} from "@auth0/auth0-react";
 import PreviewSections from "./PreviewSections";
+import { handleDeleteSections } from '../../backendConnection/Groups/handleDeleteSections';
 
 function AddSections(props: any) {
 
-    let {sectionsProp} = props;
+    let {sectionsProp, toogleNotification, toogleIsPosting, toogleSections, toogleUpdate} = props;
     let {groupname} = useParams();
-    let {getAccessTokenSilently} = useAuth0();
+    let {getAccessTokenSilently, isLoading} = useAuth0();
 
     const [formValues, setFormValues] = useState<string[]>([]);
     const [sections, setSections] = useState<SectionElement[]>(sectionsProp);
     const [PreviewMode, setPreviewMode] = useState<boolean>(false)
     const [textInput, settextInput] = useState<string[]>([])
 
-    /*useEffect(() => {
+    useEffect(() => {
         setSections(sectionsProp);
-    }, [sectionsProp]);*/
+        setFormValues(sectionsProp.map((element: SectionElement) => {
+            if (element.type === "title") {
+                return "Titulo"
+            } else if (element.type === "subtitle") {
+                return "Subtítulo"
+            } else if (element.type === "paragraph") {
+                return "Texto"
+            }
+        }));
+    }, [sectionsProp]);
 
-    const [count, setCount] = useState(0)
+    const [count, setCount] = useState(1);
 
 
     const handleChange = (e: SelectChangeEvent) => {
@@ -39,7 +49,8 @@ function AddSections(props: any) {
         const newSection: SectionElement = {
             position: formValues.length,
             type: "",
-            content: ""
+            content: "",
+            _id: ""
         }
         setSections([...sections, newSection])
         setPreviewMode(false)
@@ -51,9 +62,23 @@ function AddSections(props: any) {
             return (
                 <Stack spacing={1} sx={{mt: 2}} direction="row">
                     <Button variant="contained"
-                            onClick={() => postSections(groupname, sections, getAccessTokenSilently).then().catch(() => {
-                                console.log("Error");
-                            })}>
+                            onClick={async () => {
+                                toogleIsPosting(true);
+                                toogleSections(sections);
+                                while (isLoading) {
+                                    await new Promise(resolve => setTimeout(resolve, 100));
+                                }
+                                postSections(groupname, sections, getAccessTokenSilently)
+                                    .then(() => {
+                                        toogleNotification("Secciones guardadas correctamente", "success");
+                                    })
+                                    .catch(() => {
+                                        toogleNotification("Error al guardar los cambios", "error")
+                                    })
+                                    .finally(() => {
+                                        toogleIsPosting(false);
+                                    })
+                            }}>
                         Guardar Cambios
                     </Button>
                     <Button variant="contained" onClick={() => handlePreview()}>
@@ -78,25 +103,24 @@ function AddSections(props: any) {
         setPreviewMode(false)
     }
 
-    const handleRemove = (index: number) => {
-        const list_form = [...formValues]
-        const list_inputs = [...sections]
-        const list_inputs_texts = [...textInput]
-        list_form.splice(index, 1)
-        list_inputs.splice(index, 1)
-        list_inputs_texts.splice(index, 1)
-        setFormValues(list_form)
-        setSections(list_inputs)
-        settextInput(list_inputs_texts)
+    const handleRemove = async (index: number) => {
+        toogleIsPosting(true);
+        while(isLoading){
+            await new Promise(resolve => setTimeout(resolve, 100));
+        }
+        await handleDeleteSections(groupname, getAccessTokenSilently, sections[index].position)
+            .then(() => {
+                toogleNotification("Sección eliminada correctamente", "success");
+                toogleUpdate();
+            }).catch(() => {
+                toogleNotification("Error al eliminar la sección", "error")
+            }).finally(() => {
+                toogleIsPosting(false);
+            });
     }
     const handleChangeInput = (index: number, type: string, contenido: string) => {
         setCount(count + 1);
-        // const texto = sections[index].content + contenido;
-        sections[index] = {
-            position: index,
-            type: type,
-            content: contenido
-        };
+        sections[index] = {...sections[index], content: contenido};
 
         textInput[index] = contenido;
     }
@@ -131,7 +155,8 @@ function AddSections(props: any) {
                                     bgcolor: '#EFECEB',
                                     mt: 2,
                                     fontSize: 32
-                                }} key={element + index}>
+                                }}
+                                     key={sections[index]?._id === undefined ? sections[index].position : sections[index]?._id}>
                                     <Stack direction="row" alignItems="center" spacing={1} sx={{ml: 1, mr: 1}}>
 
                                         <TextField
@@ -140,7 +165,7 @@ function AddSections(props: any) {
                                             label="Título"
                                             variant="outlined"
                                             sx={{m: 2, bgcolor: '#fafafa'}}
-                                            defaultValue={sections[index].content}
+                                            value={sections[index].content}
                                             onChange={(newValue) => handleChangeInput(index, "title", newValue.currentTarget.value)}
                                         />
                                         <IconButton aria-label="delete" size="small"
@@ -152,7 +177,7 @@ function AddSections(props: any) {
                                 </Box>)
                         if (element === 'Subtítulo')
                             return (<Box sx={{border: 0, borderRadius: 2, width: '100%', bgcolor: '#EFECEB', mt: 2}}
-                                         key={element + index}>
+                                         key={sections[index]?._id === undefined ? sections[index].position + index : sections[index]?._id + index}>
                                     <Stack direction="row" alignItems="center" spacing={1} sx={{ml: 1, mr: 1}}>
 
                                         <TextField
@@ -176,7 +201,7 @@ function AddSections(props: any) {
                         if (element === 'Texto')
                             return (
                                 <Box sx={{border: 0, borderRadius: 2, width: '100%', bgcolor: '#EFECEB', mt: 2}}
-                                     key={element + index}>
+                                     key={sections[index]?._id === undefined ? sections[index].position + index : sections[index]?._id + index}>
                                     <Stack direction="row" alignItems="center" spacing={1} sx={{ml: 1, mr: 1}}>
 
                                         <TextField

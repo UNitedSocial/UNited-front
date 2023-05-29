@@ -5,9 +5,12 @@ export async function searchGroup(searchText: string | undefined, filters: any, 
         throw new Error("Search is undefined");
     }
 
-    // /search/h?ord=members&des=yes&fil=date&val=2018
+    let urlBackend = process.env.REACT_APP_BACKEND_URL || ""
 
-    const response = await axios.get(`http://localhost:3002/search/${searchText}?ord=${orders.order}&des=${descending}&fil=${filters.filter}&val=${filters.value}`);
+    let url = urlBackend + `/search/${searchText}?ord=${orders.order}&des=${descending}&fil=${filters.filter}&val=${filters.value}`;
+
+
+    const response = await axios.get(url);
 
     return await response.data;
 }

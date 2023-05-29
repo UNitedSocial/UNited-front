@@ -1,6 +1,10 @@
 import axios from "axios";
 
-export async function postGroup(group: any, getAccessTokenSilently: any, edit : any) {
+export async function deleteGroup(groupname: string | undefined, getAccessTokenSilently: any ) {
+    if (groupname === undefined) {
+        throw new Error("Groupname is undefined");
+    }
+
     const token = await getAccessTokenSilently();
     const instance = axios.create({
         baseURL: process.env.REACT_APP_BACKEND_URL || "",
@@ -9,9 +13,5 @@ export async function postGroup(group: any, getAccessTokenSilently: any, edit : 
         }
     });
 
-    if(edit){
-        return await instance.put("/groups/" + group.group?.info?.name, group);
-    } else {
-        return await instance.post("/groups/", group);
-    }
+    return await instance.delete("/groups/" + groupname);
 }

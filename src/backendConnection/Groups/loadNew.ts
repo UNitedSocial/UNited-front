@@ -1,9 +1,10 @@
 import axios from "axios";
 
 export async function loadNew() {
-    const response = await axios.get("http://localhost:3002/0/new");
-    /*console.log("loadNew");
-    console.log(response.data);*/
+
+    let urlBackend = process.env.REACT_APP_BACKEND_URL || ""
+
+    const response = await axios.get(urlBackend + "/groups/0/new");
 
     return await response.data;
 }

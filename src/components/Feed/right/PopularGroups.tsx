@@ -15,7 +15,7 @@ export default function PopularGroups(props: any) {
                 </Typography>
 
                 <Stack>
-                    {popularGroups?.map((g: any, idx: any) => (<GroupMapping key={idx} group={g}/>))}
+                    {popularGroups?.map((g: any, idx: any) => (<GroupMapping key={idx} groupName={g?.info?.name}/>))}
                 </Stack>
             </CardContent>
         </Card>

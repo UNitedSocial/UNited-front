@@ -20,10 +20,13 @@ function UserProfile() {
                 <Typography variant="h4" component="div">
                     {user?.name}
                 </Typography>
-                <Typography gutterBottom variant="body2">
+                <Typography gutterBottom variant="body1">
                     {user?.email} {user?.email_verified ?
                     <VerifiedButton/>
                     : null}
+                </Typography>
+                <Typography variant="subtitle2" color="text.secondary">
+                    Solo tú puedes modificar tu perfil
                 </Typography>
             </CardContent>
         </Card>);

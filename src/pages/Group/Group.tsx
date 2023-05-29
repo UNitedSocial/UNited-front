@@ -1,4 +1,4 @@
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {Grid, Stack} from "@mui/material";
 import React, {useEffect, useState} from "react";
 import {getGroup} from "../../backendConnection/Groups/getGroup";
@@ -14,25 +14,29 @@ import {getUserStateGroup} from "../../backendConnection/Users/getUserStateGroup
 import EditCard from "../../components/Groups/editCard/EditCard";
 import MemberCard from "../../components/Groups/memberCard/MemberCard";
 import Notification from "../../components/Notification/Notification";
+import DeleteCard from "../../components/Groups/deleteCard/DeleteCard";
+import PreviewSections from "../../components/GroupForm/PreviewSections";
 
 
 function Group() {
 
     const {groupname} = useParams();
 
-    const {user, isLoading} = useAuth0();
+    const {user, isLoading, isAuthenticated} = useAuth0();
 
     const [group, setGroup] = useState<any>(null);
     const [userState, setUserState] = useState<any>(null);
     const [groupMembers, setGroupMembers] = useState<any>(null);
     const [groupSimilars, setGroupSimilars] = useState<any>(null);
     const [groupRequests, setGroupRequests] = useState<any>(null);
+    const [sections, setSections] = useState<any>([]);
 
     const [update, setUpdate] = useState<boolean>(false);
     const [isLoadingScreen, setIsLoadingScreen] = useState(false);
     const [notificationDTO, setNotificationDTO] = useState<any>({open: false, message: "", severity: "info"})
     const [hasErrorLoading, sethasErrorLoading] = useState<JSON | null>(null);
     const [isPosting, setIsPosting] = useState(false);
+    const navigate = useNavigate();
 
     const toogleIsLoadingScreen = (value: boolean) => {
         setIsLoadingScreen(value);
@@ -42,20 +46,29 @@ function Group() {
         setUpdate(!update);
     }
 
+    const toogleHome = () => {
+        navigate("/");
+    }
+
     const toogleNotification = (message: string, severity: "success" | "info" | "warning" | "error") => {
         setNotificationDTO({open: true, message: message, severity: severity});
     }
 
     useEffect(() => {
         toogleIsLoadingScreen(true);
-        loadGroupInfo().then(() => toogleIsLoadingScreen(false));
+        loadGroupInfo().then(() => {
+            console.log("Group loaded");
+            toogleIsLoadingScreen(false);
+        });
     }, [groupname, user, update]);
 
     async function loadGroupInfo() {
         await getGroup(groupname).then(data => loadedGroup(data)).catch(error => errorLoading(error));
         await getGroupSimilar(groupname).then(data => loadedGroupSimilar(data)).catch(() => loadedGroupSimilar([]));
-        while (isLoading) {
-            await new Promise(r => setTimeout(r, 100));
+        if(isAuthenticated) {
+            while (isLoading) {
+                await new Promise(r => setTimeout(r, 100));
+            }
         }
         await getUserStateGroup(groupname, user?.nickname).then(data => loadedUserState(data)).catch(() => loadedUserState([]));
     }
@@ -65,6 +78,17 @@ function Group() {
             setGroup(data);
             setGroupMembers(data.members);
             setGroupRequests(data.requests);
+            setSections(data.page.map((section: any) => {
+                if(section.type === "title"){
+                    return {...section, content: section.content.title}
+                } else if(section.type === "subtitle"){
+                    return {...section, content: section.content.subtitle}
+                } else if(section.type === "paragraph"){
+                    return {...section, content: section.content.paragrah}
+                } else {
+                    return section;
+                }
+            }));
         } catch {
             errorLoading({} as JSON);
         }
@@ -108,14 +132,17 @@ function Group() {
             <Grid item xs={3}>
                 <Grid container justifyContent="center">
                     <Stack spacing={4}>
-                        <MemberCard groupMembers={groupMembers} userState={userState} groupName={groupname} toogleUpdate={toogleUpdate} toogleIsLoadingScreen={toogleIsLoadingScreen}/>
+                        <MemberCard groupMembers={groupMembers} userState={userState} groupName={groupname}
+                                    toogleUpdate={toogleUpdate} toogleIsLoadingScreen={toogleIsLoadingScreen}/>
                         <SimilarCard groupSimilars={groupSimilars}/>
                     </Stack>
                 </Grid>
             </Grid>
 
             <Grid item xs={6}>
-                <GroupCard group={group} userState={userState} isPosting={isPosting} toogleUpdate={toogleUpdate} toogleIsLoadingScreen={toogleIsLoadingScreen}/>
+                <GroupCard group={group} userState={userState} isPosting={isPosting} toogleUpdate={toogleUpdate}
+                           toogleIsLoadingScreen={toogleIsLoadingScreen} toogleNotification={toogleNotification}/>
+                <PreviewSections sections={sections}/>
             </Grid>
 
             <Grid item xs={3}>
@@ -125,7 +152,12 @@ function Group() {
                         {userState === "editor" ?
                             <>
                                 <EditCard/>
-                                <RequestsCard groupRequests={groupRequests} toogleUpdate={toogleUpdate} toogleIsLoadingScreen={toogleIsLoadingScreen} toogleNotification={toogleNotification}/>
+                                <DeleteCard userState={userState} groupName={groupname} toogleUpdate={toogleUpdate}
+                                            toogleNotification={toogleNotification}
+                                            toogleIsLoadingScreen={toogleIsLoadingScreen} toogleHome={toogleHome}/>
+                                <RequestsCard groupRequests={groupRequests} toogleUpdate={toogleUpdate}
+                                              toogleIsLoadingScreen={toogleIsLoadingScreen}
+                                              toogleNotification={toogleNotification}/>
                             </>
                             : null
                         }

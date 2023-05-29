@@ -35,7 +35,19 @@ const topicOptions = ["Ingeniería"];
 
 export default function GroupForm(props: any) {
 
-    const {edit, sections, toogleNotification} = props;
+    const {edit, sections, toogleNotification, toogleUpdate} = props;
+
+    const [sectionsState, setSectionsState] = useState<any>(sections.map((section: any) => {
+        if(section.type === "title"){
+            return {...section, content: section.content.title}
+        } else if(section.type === "subtitle"){
+            return {...section, content: section.content.subtitle}
+        } else if(section.type === "paragraph"){
+            return {...section, content: section.content.paragrah}
+        } else {
+            return section;
+        }
+    }));
 
     const newGroupElement: GroupElement = {
         username: "i1",
@@ -73,11 +85,15 @@ export default function GroupForm(props: any) {
     const {getAccessTokenSilently} = useAuth0();
     const [isPosting, setIsPosting] = useState(false)
     const [groupElement, setGroupElement] = useState<GroupElement>(newGroupElement);
-
+    const [focused, setFocused] = useState<any>([]);
 
     useEffect(() => {
         setGroupElement(props.group);
     }, [props.group]);
+
+    const toogleIsPosting = (response : boolean) => {
+        setIsPosting(response);
+    }
 
     function handleChangeInfo(page: string, value: string | boolean | null) {
         setGroupElement({
@@ -133,6 +149,10 @@ export default function GroupForm(props: any) {
             })
     }
 
+    function toogleSections(sectionsParameter: any) {
+        setSectionsState(sectionsParameter);
+    }
+
     /*function handleImageChange(event: any) {
 
         setGroupElement({
@@ -182,12 +202,13 @@ export default function GroupForm(props: any) {
                     fullWidth={true}
                     label="Nombre del grupo"
                     variant="outlined"
-                    error={groupElement.group.info.name === ""}
+                    error={groupElement.group.info.name === "" && focused.includes("name")}
                     helperText={groupElement.group.info.name === "" ? "El nombre del grupo no puede estar vacío" : ""}
                     value={groupElement.group.info.name}
                     InputProps={{
                         readOnly: edit
                     }}
+                    onFocus={() => setFocused([...focused, "name"])}
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                         handleChangeInfo("name", event.target.value);
                     }}
@@ -287,9 +308,10 @@ export default function GroupForm(props: any) {
                     multiline
                     fullWidth={true}
                     rows={4}
-                    error={groupElement.group.info.description.length < 15}
+                    error={groupElement.group.info.description.length < 15 && focused.includes("description")}
                     helperText={groupElement.group.info.description.length < 15 ? "El campo de descripción debe tener al menos 15 caracteres" : ""}
                     value={groupElement.group.info.description}
+                    onFocus={() => setFocused([...focused, "description"])}
                     onChange={(newValue) => handleChangeInfo("description", newValue.target.value)}
                 />
             </Grid>
@@ -331,9 +353,10 @@ export default function GroupForm(props: any) {
                     fullWidth={true}
                     label="Correo"
                     variant="outlined"
-                    error={groupElement.group.info.contact.mail === ""}
+                    error={groupElement.group.info.contact.mail === "" && focused.includes("mail")}
                     helperText={groupElement.group.info.contact.mail === "" ? "El correo es obligatorio" : ""}
                     value={groupElement.group.info.contact.mail}
+                    onFocus={() => setFocused([...focused, "mail"])}
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                         handleChangeContact("mail", event.target.value);
                     }}
@@ -357,9 +380,10 @@ export default function GroupForm(props: any) {
                     fullWidth={true}
                     label="Teléfono"
                     variant="outlined"
-                    error={groupElement.group.info.contact.cellphone === ""}
-                    helperText={groupElement.group.info.contact.cellphone === "" ? "El Telefono es obligatorio" : ""}
+                    error={groupElement.group.info.contact.cellphone === "" && focused.includes("cellphone")}
+                    helperText={groupElement.group.info.contact.cellphone === "" ? "El telefono es obligatorio" : ""}
                     value={groupElement.group.info.contact.cellphone}
+                    onFocus={() => setFocused([...focused, "cellphone"])}
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                         handleChangeContact("cellphone", event.target.value);
                     }}
@@ -505,7 +529,7 @@ export default function GroupForm(props: any) {
         <br/>
 
         {edit ?
-            <AddSections sectionsProp={sections}/> : null}
+            <AddSections sectionsProp={sectionsState} toogleNotification={toogleNotification} toogleIsPosting={toogleIsPosting} toogleUpdate={toogleUpdate} toogleSections={toogleSections} /> : null}
 
         <br/>
     </Box>)
@@ -572,7 +596,7 @@ export default function GroupForm(props: any) {
         if (e?.response?.data?.message === undefined) {
             toogleNotification(e?.message, "error");
         } else {
-            toogleNotification(e?.response?.data?.message, "error");
+            toogleNotification("Error al crear el grupo", "error");
         }
     }
 }

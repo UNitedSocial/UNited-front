@@ -9,7 +9,7 @@ export default function SimilarCard(props: any) {
     return (<>
         <Card sx={{maxWidth: {xs: "60%", md: "100%"}}} style={{background: "#EFECEB"}} variant="outlined">
             <CardContent>
-                <Typography variant="inherit" component="div" sx={{mb: 2}} className="sidebarUtilityTitle">
+                <Typography variant="inherit" component="div" sx={{mb: 2, mt: 2}} className="sidebarUtilityTitle">
                     <strong>
                         Grupos similares:
                     </strong>
@@ -17,7 +17,7 @@ export default function SimilarCard(props: any) {
                 <Stack className="sidebarUtilityMenu">
                     <ul>
                         {groupSimilars?.map((g: any, idx: any) => {
-                            return (<GroupMapping key={idx} group={g}/>);
+                            return (<GroupMapping key={idx} groupName={g?.group?.name}/>);
                         })}
                     </ul>
                 </Stack>

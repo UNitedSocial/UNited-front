@@ -21,12 +21,17 @@ export default function EditGroup(props: any) {
     const [sections, setSections] = useState<any>();
     const [userState, setUserState] = useState<any>(null);
 
+    const [update, setUpdate] = useState<any>(true);
     const [isLoadingState, setIsLoadingState] = useState(true);
     const [hasErrorLoading, sethasErrorLoading] = useState<JSON | null>(null);
     const [notificationDTO, setNotificationDTO] = useState<any>({open: false, message: "", severity: "info"})
 
     const toogleNotification = (message: string, severity: "success" | "info" | "warning" | "error") => {
         setNotificationDTO({open: true, message: message, severity: severity});
+    }
+
+    const toogleUpdate = () => {
+        setUpdate(!update);
     }
 
     useEffect(() => {
@@ -41,7 +46,7 @@ export default function EditGroup(props: any) {
     useEffect(() => {
         setIsLoadingState(true);
         loadGroupInfo().then(() => setIsLoadingState(false)).catch(error => errorLoading(error));
-    }, [groupname, user, isLoading]);
+    }, [groupname, user, isLoading, update]);
 
     async function loadGroupInfo() {
         await getGroup(groupname).then(data => loadedGroup(data)).catch(error => errorLoading(error));
@@ -96,7 +101,7 @@ export default function EditGroup(props: any) {
 
                 <Grid item xs={6}>
                     <GroupForm group={groupElement} sections={sections} edit={true}
-                               toogleNotification={toogleNotification}/>
+                               toogleNotification={toogleNotification} toogleUpdate={toogleUpdate}/>
                 </Grid>
 
                 <Grid item xs={3}>

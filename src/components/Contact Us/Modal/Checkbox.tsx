@@ -4,27 +4,13 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import CheckboxList from '@mui/material/Checkbox';
 
-export default function Checkbox() {
-    const [checked, setChecked] = React.useState([0]);
+export default function Checkbox(props: any) {
 
-    const reportType = ['error', 'grupo', 'usuario'];
-
-    const handleToggle = (value: number) => () => {
-        const currentIndex = checked.indexOf(value);
-        const newChecked = [...checked];
-
-        if (currentIndex === -1) {
-            newChecked.push(value);
-        } else {
-            newChecked.splice(currentIndex, 1);
-        }
-
-        setChecked(newChecked);
-    };
+    const {handleToggle, checked, reportType} = props;
 
     return (
         <List dense sx={{width: '100%', maxWidth: 360, bgcolor: 'background.paper'}}>
-            {reportType.map((value) => {
+            {reportType.map((value: any) => {
                 const labelId = `checkbox-list-secondary-label-${value}`;
                 return (
                     <ListItem

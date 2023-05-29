@@ -8,7 +8,7 @@ export async function changeRole(groupname: string | undefined, username: string
 
     const token = await getAccessTokenSilently();
     const instance = axios.create({
-        baseURL: "http://localhost:3002",
+        baseURL: process.env.REACT_APP_BACKEND_URL || "",
         headers: {
             "Authorization": "Bearer " + token
         }

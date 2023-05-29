@@ -7,6 +7,7 @@ import NewGroup from "./NewGroup/NewGroup";
 import ContactUs from "./Contact Us/ContactUs";
 import Profile from "./Profile/Profile";
 import EditGroup from "./EditGroup/EditGroup";
+import Admin from "./Admin/Admin";
 
 
 function Home() {
@@ -26,6 +27,7 @@ function Home() {
                     <Route path="/group/:groupname" element={<Group/>}/>
                     <Route path="/edit/:groupname" element={<EditGroup/>}/>
                     <Route path="/profile" element={<Profile/>}/>
+                    <Route path="/admin" element={<Admin/>}/>
                     <Route path="/contact-us" element={<ContactUs/>}/>
                 </Routes>
 

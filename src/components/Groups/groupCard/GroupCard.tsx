@@ -9,7 +9,7 @@ import {useAuth0} from "@auth0/auth0-react";
 
 function Group(props: any) {
 
-    const {isPosting, userState, group, toogleUpdate, toogleIsLoadingScreen} = props;
+    const {isPosting, userState, group, toogleUpdate, toogleIsLoadingScreen, toogleNotification} = props;
 
     let {getAccessTokenSilently, user} = useAuth0();
 
@@ -97,9 +97,12 @@ function Group(props: any) {
                         >
                             <button
                                 onClick={() => {
-                                    if(userState === "doesn't belong" || userState === "member" || userState === "editor") {
+                                    if (userState === "doesn't belong" || userState === "member" || userState === "editor") {
                                         toogleIsLoadingScreen(true);
-                                        postUserGroupRequest(group?.info?.name, getAccessTokenSilently, userState, user?.nickname).then(() => toogleUpdate())
+                                        postUserGroupRequest(group?.info?.name, getAccessTokenSilently, userState, user?.nickname)
+                                            .then(() => toogleUpdate())
+                                            .catch(() => toogleNotification("Error al enviar petición", "error"))
+                                            .finally(() => toogleIsLoadingScreen(false));
                                     }
                                 }} style={{
                                 border: "none",
@@ -114,7 +117,6 @@ function Group(props: any) {
                                             return <MdGroupAdd color={"black"} size={30}/>;
                                         case "pending":
                                             return <RxClock color={"black"} size={30}/>;
-                                        case "editor":
                                         case "member":
                                             return <MdGroupRemove color={"black"} size={30}/>;
                                         default:

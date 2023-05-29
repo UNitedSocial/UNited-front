@@ -24,7 +24,7 @@ export default function GroupRequests(props: any) {
                             toogleIsLoadingScreen(true);
                             putGroupRequest(user?.nickname, "approved", request?.username, groupname, getAccessTokenSilently).then(() => toogleUpdate()).catch(e => {
                                 toogleIsLoadingScreen(false);
-                                toogleNotification(e?.message, "error");
+                                toogleNotification("Error al aceptar petición", "error");
                             })
                         }}
                         style={{
@@ -41,9 +41,11 @@ export default function GroupRequests(props: any) {
                     <button
                         onClick={() => {
                             toogleIsLoadingScreen(true);
-                            putGroupRequest(user?.nickname, "rejected", request?.username, groupname, getAccessTokenSilently).then(() => toogleUpdate()).catch(e => {
+                            putGroupRequest(user?.nickname, "rejected", request?.username, groupname, getAccessTokenSilently)
+                                .then(() => toogleUpdate())
+                                .catch(e => {
                                 toogleIsLoadingScreen(false);
-                                toogleNotification(e?.message, "error");
+                                toogleNotification("Error al rechazar petición", "error");
                             })
                         }}
                         style={{

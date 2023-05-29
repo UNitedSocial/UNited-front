@@ -4,7 +4,7 @@ export async function putGroupRequest(user: string | undefined, response: string
 
     const token = await getAccessTokenSilently();
     const instance = axios.create({
-        baseURL: "http://localhost:3002",
+        baseURL: process.env.REACT_APP_BACKEND_URL || "",
         headers: {
             "Authorization": "Bearer " + token
         }

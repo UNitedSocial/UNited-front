@@ -4,13 +4,13 @@ export async function postUserGroupRequest(groupname: string | undefined, getAcc
 
     const token = await getAccessTokenSilently();
     const instance = axios.create({
-        baseURL: "http://localhost:3002",
+        baseURL: process.env.REACT_APP_BACKEND_URL || "",
         headers: {
             "Authorization": "Bearer " + token
         }
     });
 
-    if (userState === "notBelongs") {
+    if (userState === "doesn't belong") {
         const groupNameDTO = {
             "groupName": groupname
         }
@@ -18,10 +18,9 @@ export async function postUserGroupRequest(groupname: string | undefined, getAcc
         return await instance.post("/groups/" + groupname + "/requests", groupNameDTO)
     } else if (userState === "member" || userState === "editor") {
         const groupNameDTO = {
-            "name": groupname,
-            "user" : {"nickname": user}
+            "user": {"username": user}
         }
 
-        return await instance.put("/users/quitGroup", groupNameDTO)
+        return await instance.put("/groups/" + groupname + "/quitGroup", groupNameDTO)
     }
 }

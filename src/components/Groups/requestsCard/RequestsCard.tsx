@@ -18,7 +18,7 @@ export default function RequestsCard(props: any) {
                 </Typography>
 
                 <Stack>
-                    {groupRequests?.map((r: any, idx: any) => (<GroupRequests key={idx} request={r} toogleUpdate={toogleUpdate} toogleIsLoadingScreen={toogleIsLoadingScreen} toogleNotification={toogleNotification}/>))}
+                    {groupRequests?.filter((request : any) => request.state !== "approved").map((r: any, idx: any) => (<GroupRequests key={idx} request={r} toogleUpdate={toogleUpdate} toogleIsLoadingScreen={toogleIsLoadingScreen} toogleNotification={toogleNotification}/>))}
                 </Stack>
             </CardContent>
         </Card>

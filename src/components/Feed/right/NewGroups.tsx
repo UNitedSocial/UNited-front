@@ -5,6 +5,7 @@ export default function NewGroups(props: any) {
 
     const {newGroups} = props;
 
+
     return (
         <Card sx={{maxWidth: {xs: "60%", md: "100%"}}} style={{background: "#EFECEB"}} variant="outlined">
             <CardContent>
@@ -15,7 +16,7 @@ export default function NewGroups(props: any) {
                 </Typography>
 
                 <Stack>
-                    {newGroups?.map((g: any, idx: any) => (<GroupMapping key={idx} group={g}/>))}
+                    {newGroups?.map((g: any, idx: any) => (<GroupMapping key={idx} groupName={g?.info?.name}/>))}
                 </Stack>
             </CardContent>
         </Card>

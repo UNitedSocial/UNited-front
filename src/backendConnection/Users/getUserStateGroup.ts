@@ -6,7 +6,9 @@ export async function getUserStateGroup(groupname: string | undefined, username:
         return undefined;
     }
 
-    const response = await axios.get(`http://localhost:3002/groups/${groupname}/${username}`);
+    let urlBackend = process.env.REACT_APP_BACKEND_URL || "";
+
+    const response = await axios.get(urlBackend + `/groups/${groupname}/${username}`);
 
 
     return await response.data;

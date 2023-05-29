@@ -5,7 +5,9 @@ export async function getGroupSimilar(groupname: string | undefined) {
         throw new Error("Groupname is undefined");
     }
 
-    const response = await axios.get("http://localhost:3002/groups/" + groupname + "/related?n=3&a=0");
+    let urlBackend = process.env.REACT_APP_BACKEND_URL || ""
+
+    const response = await axios.get(urlBackend + "/groups/" + groupname + "/related?n=3&a=0");
 
     return await response.data;
 }

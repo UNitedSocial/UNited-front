@@ -1,14 +1,16 @@
 import {Box, Button, CircularProgress, Grid, Stack, TextField} from "@mui/material";
 import * as React from "react";
 import {useState} from "react";
-import axios from "axios";
 import Notification from "../Notification/Notification";
 import Popup from "./Modal/Popup"
+import {sendContactUs} from "../../backendConnection/Users/sendContactUs";
+import {reportError} from "../../backendConnection/Users/reportError";
+import {useAuth0} from "@auth0/auth0-react";
 
 
 function ContactForm() {
 
-    // const {user, isAuthenticated, getAccessTokenSilently, isLoading} = useAuth0();
+    const {getAccessTokenSilently, isAuthenticated} = useAuth0();
     const [isPosting, setIsPosting] = useState(false)
     const [formElement, setFormElement] = useState({
         contactForm: {
@@ -17,7 +19,13 @@ function ContactForm() {
             message: ""
         }
     });
-    const [notificationDTO, setNotificationDTO] = useState<any>({open: false, message: "", severity: "info"})
+    const [notificationDTO, setNotificationDTO] = useState<any>({open: false, message: "", severity: "info"});
+    const [focused, setFocused] = useState<any>([]);
+
+
+    const toogleNotification = (message: string, severity: "success" | "info" | "warning" | "error") => {
+        setNotificationDTO({open: true, message: message, severity: severity});
+    }
 
     function handleChangeForm(page: string, value: string | null) {
         setFormElement({
@@ -92,9 +100,10 @@ function ContactForm() {
                                 fullWidth={true}
                                 label="Nombre"
                                 variant="outlined"
-                                error={formElement.contactForm.name === ""}
+                                error={formElement.contactForm.name === "" && focused.includes("name")}
                                 helperText={formElement.contactForm.name === "" ? "El nombre es requerido" : ""}
                                 value={formElement.contactForm.name}
+                                onFocus={() => setFocused([...focused, "name"])}
                                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                                     handleChangeForm("name", event.target.value);
                                 }}
@@ -104,9 +113,10 @@ function ContactForm() {
                                 fullWidth={true}
                                 label="Correo electrónico"
                                 variant="outlined"
-                                error={formElement.contactForm.email === ""}
+                                error={formElement.contactForm.email === "" && focused.includes("email")}
                                 helperText={formElement.contactForm.email === "" ? "El correo es requerido" : ""}
                                 value={formElement.contactForm.email}
+                                onFocus={() => setFocused([...focused, "email"])}
                                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                                     handleChangeForm("email", event.target.value);
                                 }}
@@ -116,30 +126,32 @@ function ContactForm() {
                                 multiline
                                 fullWidth={true}
                                 rows={4}
-                                error={formElement.contactForm.message === ""}
+                                error={formElement.contactForm.message === "" && focused.includes("message")}
                                 helperText={formElement.contactForm.message === "" ? "El mensaje es obligatorio" : ""}
                                 value={formElement.contactForm.message}
+                                onFocus={() => setFocused([...focused, "message"])}
                                 onChange={(newValue) => handleChangeForm("message", newValue.target.value)}
                             />
                             <Button variant="contained" sx={{mt: 4}} color="primary"
-                                    onClick={() => handleSubmit().then(() => {
-                                        setNotificationDTO({
-                                            open: true,
-                                            message: "Mensaje enviado con éxito",
-                                            severity: "success"
-                                        });
-                                        setFormElement({
-                                            contactForm: {
-                                                name: "",
-                                                email: "",
-                                                message: ""
-                                            }
-                                        });
-                                        setIsPosting(false);
-                                    }).catch(() => handleSubmitError())}>
+                                    onClick={() => handleSubmit()
+                                        .then(() => {
+                                            setNotificationDTO({
+                                                open: true,
+                                                message: "Mensaje enviado con éxito",
+                                                severity: "success"
+                                            });
+                                            setFormElement({
+                                                contactForm: {
+                                                    name: "",
+                                                    email: "",
+                                                    message: ""
+                                                }
+                                            });
+                                            setIsPosting(false);
+                                        }).catch(() => handleSubmitError())}>
                                 Enviar mensaje
                             </Button>
-                            <Popup/>
+                            <Popup toogleNotification={toogleNotification}/>
                         </Stack>
                     </Grid>
                 </Grid>
@@ -158,7 +170,9 @@ function ContactForm() {
 
         setIsPosting(true);
 
-        await axios.post("http://localhost:3002/api/group", formElement);
+        let contactUS_string = `Name: ${formElement.contactForm.name}, Email: ${formElement.contactForm.email}, Message: ${formElement.contactForm.message}`;
+
+        await reportError(contactUS_string, "Contact Us", getAccessTokenSilently, isAuthenticated);
     }
 
     function handleSubmitError() {
