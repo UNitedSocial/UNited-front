@@ -6,14 +6,12 @@ import {useEffect, useState} from "react";
 import {useAuth0} from "@auth0/auth0-react";
 import {useNavigate} from "react-router-dom";
 import LoadingScreen from "../Loading/LoadingScreen";
-import {Error} from "@mui/icons-material";
 import ErrorMessage from "../Error/ErrorMessage";
 
 export default function Admin(props: any) {
 
     const {isAuthenticated, getAccessTokenSilently, user, isLoading} = useAuth0();
 
-    const [webRole, setWebRole] = useState<any>("");
     const [loading, setloading] = useState(true);
     const [hasErrorLoading, setHasErrorLoading] = useState(null);
 
@@ -21,7 +19,7 @@ export default function Admin(props: any) {
 
     useEffect(() => {
         if (isAuthenticated) {
-            loadInformation();
+            loadInformation().then();
         }
     }, [isAuthenticated]);
 
@@ -37,9 +35,8 @@ export default function Admin(props: any) {
         while (isLoading) {
             await new Promise(r => setTimeout(r, 100));
         }
-        postUserInformation(getAccessTokenSilently, user).then(r => {
-            setWebRole(r);
-            if(r !== "master"){
+        await postUserInformation(getAccessTokenSilently, user).then(r => {
+            if (r !== "master") {
                 navigate("/");
             }
             toogleLoading(false);
@@ -50,12 +47,8 @@ export default function Admin(props: any) {
         return (<LoadingScreen/>);
     }
 
-    if(hasErrorLoading !== null){
-        return (<ErrorMessage />);
-    }
-
-    if (webRole !== "master") {
-        navigate("/");
+    if (hasErrorLoading !== null) {
+        return (<ErrorMessage/>);
     }
 
     return (

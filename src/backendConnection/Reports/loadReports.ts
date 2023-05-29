@@ -10,9 +10,7 @@ export async function loadReports(getAccessTokenSilently: any) {
         }
     });
 
-    console.log(token)
-
-    let response = await instance.get("/reports/");
+    let response = await instance.get("/reports");
 
     return response.data;
 

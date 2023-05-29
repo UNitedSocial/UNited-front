@@ -13,7 +13,7 @@ function ReportElement(props: any) {
 
     return (
         <>
-            <Grid container spacing={2} sx={{mt: 2}}>
+            <Grid container spacing={2} sx={{mt: 2}} key={report?.id_}>
                 <Grid item xs={10.5}>
                     <Typography sx={{mb: 2, color: "red"}}>
                         {
