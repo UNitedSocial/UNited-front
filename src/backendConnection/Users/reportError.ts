@@ -7,14 +7,14 @@ export async function reportError(report: any, checked: any, getAccessTokenSilen
     if(isAuthenticated){
         const token = await getAccessTokenSilently();
         instance = axios.create({
-            baseURL: process.env.REACT_APP_BACKEND_URL || "",
+            baseURL: "https://united-back-7hm5l4l62a-rj.a.run.app",
             headers: {
                 "Authorization": "Bearer " + token
             }
         });
     } else {
         instance = axios.create({
-            baseURL: process.env.REACT_APP_BACKEND_URL || ""
+            baseURL: "https://united-back-7hm5l4l62a-rj.a.run.app"
         });
     }
 

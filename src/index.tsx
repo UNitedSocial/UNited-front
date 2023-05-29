@@ -10,9 +10,9 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
-const domain = process.env.REACT_APP_AUTH0_DOMAIN || "";
-const clientID = process.env.REACT_APP_AUTH0_CLIENT_ID || "";
-const audience = process.env.REACT_APP_AUTH0_AUDIENCE || "";
+const domain = "dev-nj72nakbgyv4edeo.us.auth0.com";
+const clientID = "rWTnXxPVrBR2IMBDLXhmx7BByyOn98k0";
+const audience = "UNited-API";
 
 root.render(
   <React.StrictMode>

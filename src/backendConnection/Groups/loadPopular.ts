@@ -2,9 +2,9 @@ import axios from "axios";
 
 export async function loadPopular() {
 
-    let urlBackend = process.env.REACT_APP_BACKEND_URL || "";
+    let urlBackend = "https://united-back-7hm5l4l62a-rj.a.run.app";
 
-    console.log(urlBackend + "/groups/0/popular")
+    console.log(urlBackend + "/groups/0/popular");
 
     const response = await axios.get(urlBackend + "/groups/0/popular");
 

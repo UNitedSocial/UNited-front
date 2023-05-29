@@ -5,7 +5,7 @@ export async function getGroup(groupname: string | undefined) {
         throw new Error("Groupname is undefined");
     }
 
-    let urlBackend = process.env.REACT_APP_BACKEND_URL || "";
+    let urlBackend = "https://united-back-7hm5l4l62a-rj.a.run.app";
 
     const response = await axios.get(urlBackend + "/groups/" + groupname);
 

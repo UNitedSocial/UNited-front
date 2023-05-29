@@ -5,7 +5,7 @@ export async function searchGroup(searchText: string | undefined, filters: any, 
         throw new Error("Search is undefined");
     }
 
-    let urlBackend = process.env.REACT_APP_BACKEND_URL || ""
+    let urlBackend = "https://united-back-7hm5l4l62a-rj.a.run.app"
 
     let url = urlBackend + `/search/${searchText}?ord=${orders.order}&des=${descending}&fil=${filters.filter}&val=${filters.value}`;
 
