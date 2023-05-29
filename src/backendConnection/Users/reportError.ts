@@ -60,7 +60,7 @@ export async function reportError(report: any, checked: any, getAccessTokenSilen
     } else {
         errorDTO = {
             report: {
-                reportType: "feedBack",
+                reportType: "feedback",
                 reportInfo: {
                     description: report
                 }
