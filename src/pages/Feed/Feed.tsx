@@ -66,6 +66,7 @@ export default function Feed(props: any) {
             if (concat) {
                 setPosts(posts.concat(data));
             } else {
+                console.log(data);
                 setPosts(data);
                 toogleIsLoading(false);
                 sethasErrorLoading(null);
